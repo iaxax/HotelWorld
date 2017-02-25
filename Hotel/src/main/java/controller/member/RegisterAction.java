@@ -4,9 +4,9 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import vo.member.RegisterVO;
 
-public class RegisterAction extends ActionSupport{
+public class RegisterAction extends ActionSupport {
 
-        private static final long serialVersionUID = 4757893800386205254L;
+        private static final long serialVersionUID = 6247584960187577034L;
         
         private RegisterVO registerVO;
 

@@ -36,14 +36,8 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="javascript:void(0);">
+            <li><a href="javascript:void(0);"
             >退出</a></li>
         </ul>
     </div>
 </div>
-
-<script>
-function jump(loc) {
-	window.location = loc;
-}
-</script>

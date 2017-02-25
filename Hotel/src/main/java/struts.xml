@@ -13,7 +13,7 @@
         
         <package name="member" extends="struts-default">
                 <action name="register" class="controller.member.RegisterAction" method="register">
-                        <result name="success">/hello.jsp</result>
+                        <result name="success">/pages/home.jsp</result>
                 </action>
         </package>
  </struts>
