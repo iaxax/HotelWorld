@@ -1,0 +1,15 @@
+# Eclipse
+*.classpath
+*.project
+*.settings/
+ 
+# Maven
+*log/
+*target/
+
+# Java
+*.class
+*.war
+*.ear
+*.jar
+*.tern-project
