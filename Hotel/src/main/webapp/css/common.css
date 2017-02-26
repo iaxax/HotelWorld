@@ -1,0 +1,28 @@
+* {
+	font-family: "Microsoft YaHei";
+}
+
+/* button icon */
+.btn-icon {
+	width: 120px;
+	height:120px;
+	margin:50px auto;
+	cursor:pointer;
+}
+
+p > a {
+	cursor:pointer;
+}
+
+.input-gap {
+	margin-top: 40px;
+}
+
+.block-gap {
+	margin: 50px auto;
+}
+
+.input {
+	width: 40%;
+	margin: auto 30%;
+}
