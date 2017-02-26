@@ -1,6 +1,10 @@
 package vo.member;
 
-public class RegisterVO {
+import java.io.Serializable;
+
+public class RegisterVO implements Serializable {
+
+        private static final long serialVersionUID = -3873089839036795823L;
 
         private String name;
         
