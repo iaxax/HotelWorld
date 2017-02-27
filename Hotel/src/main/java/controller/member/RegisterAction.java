@@ -21,7 +21,7 @@ public class RegisterAction extends ActionSupport {
         private ResultVO result;
         
         public String register() {
-                result = member.register(new RegisterVO());
+                result = member.register(new RegisterVO(name, idCard, phone));
                 return SUCCESS;
         }
 

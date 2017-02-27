@@ -2,9 +2,13 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
 "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-        <bean id="member" class="service.impl.MemberBean" />
+        <bean id="memberDAO" class="dao.impl.MemberDAOImpl" />
+
+        <bean id="memberBean" class="service.impl.MemberBean">
+                <property name="member" ref="memberDAO" />
+        </bean>
         
         <bean id="RegisterAction" class="controller.member.RegisterAction">
-                <property name="member" ref="member" />
+                <property name="member" ref="memberBean" />
         </bean>
 </beans>

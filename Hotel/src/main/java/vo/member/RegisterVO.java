@@ -2,6 +2,10 @@ package vo.member;
 
 import java.io.Serializable;
 
+import constant.MemberRank;
+import constant.MemberState;
+import po.member.MemberPO;
+
 public class RegisterVO implements Serializable {
 
         private static final long serialVersionUID = -3873089839036795823L;
@@ -11,6 +15,17 @@ public class RegisterVO implements Serializable {
         private String idCard;
         
         private String phone;
+
+        public RegisterVO(String name, String idCard, String phone) {
+                super();
+                this.name = name;
+                this.idCard = idCard;
+                this.phone = phone;
+        }
+
+        public RegisterVO() {
+                super();
+        }
 
         public String getName() {
                 return name;
@@ -36,4 +51,11 @@ public class RegisterVO implements Serializable {
                 this.phone = phone;
         }
         
+        public MemberPO toPO() {
+                return new MemberPO(
+                                null, this.name, this.idCard,
+                                this.phone, MemberRank.low,
+                                0, 0, 0, MemberState.pause
+                );
+        }
 }

@@ -54,15 +54,15 @@ function registerValidate() {
 	}
 	
 	var idNum = $('#idNum').val();
-	var idRegex = /[\d]{17}[Xx\d]/g;
-	if (!idRegex.test(idNum)) {
+	var idRegex = /^(\d{17}[Xx\d])$/;
+	if (idRegex.test(idNum) == false) {
 		showError(tip, '请填写正确的身份证号');
 		return;
 	}
 	
 	var phone = $('#phone').val();
-	var pRegex = /[\d]{11}/g;
-	if (!pRegex.test(phone)) {
+	var pRegex = /^\d{11}$/;
+	if (!pRegex.test(phone) == false) {
 		showError(tip, '请填写正确的手机号');
 		return;
 	}
