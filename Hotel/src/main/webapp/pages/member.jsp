@@ -48,10 +48,5 @@
         <div class="container block-gap">
                 <div id="form"></div>
         </div>
-        
-        <script src="/Hotel/js/nav.js"></script>
-        <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
-        <script src="/Hotel/js/jquery.tmpl.min.js"></script>
-        <script src="/Hotel/js/member.js"></script>
 </body>
 </html>

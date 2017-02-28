@@ -44,33 +44,11 @@ function showSuccess(tag, tip) {
 	}, 2000);
 }
 
-function registerValidate() {
-	var tip = $('#tip');
-	
-	var name = $('#name').val();
-	if (!name) {
-		showError(tip, '姓名不能为空');
-		return;
-	}
-	
-	var idNum = $('#idNum').val();
-	var idRegex = /^(\d{17}[Xx\d])$/;
-	if (idRegex.test(idNum) == false) {
-		showError(tip, '请填写正确的身份证号');
-		return;
-	}
-	
-	var phone = $('#phone').val();
-	var pRegex = /^\d{11}$/;
-	if (!pRegex.test(phone) == false) {
-		showError(tip, '请填写正确的手机号');
-		return;
-	}
-	
+function submitRegister(tip) {
 	var vo = {
-			"name": name,
-			"idCard": idNum,
-			"phone": phone
+			"name": $('#name').val(),
+			"idCard": $('#idNum').val(),
+			"phone": $('#phone').val()
 	}
 	
 	$.ajax({
@@ -89,4 +67,35 @@ function registerValidate() {
 			}
 		}
 	});
+}
+
+function registerValidate() {
+	var tip = $('#tip');
+	
+	var name = $('#name').val();
+	var len = name.length;
+	if (len == 0) {
+		showError(tip, '姓名不能为空');
+		return;
+	}
+	if (len > 10) {
+		showError(tip, '姓名长度不能大于10个字符');
+		return;
+	}
+	
+	var idNum = $('#idNum').val();
+	var idRegex = /^(\d{17}[Xx\d])$/;
+	if (idRegex.test(idNum) == false) {
+		showError(tip, '请填写正确的身份证号');
+		return;
+	}
+	
+	var phone = $('#phone').val();
+	var pRegex = /^\d{11}$/;
+	if (pRegex.test(phone) == false) {
+		showError(tip, '请填写正确的手机号');
+		return;
+	}
+	
+	submitRegister(tip);
 }
