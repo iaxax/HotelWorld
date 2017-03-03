@@ -8,4 +8,9 @@ public interface MemberDAO {
         boolean isMemberExist(String idCard);
         
         ResultVO createMember(MemberPO po);
+        
+        boolean isBankAccountValid(String id, String password);
+        
+        ResultVO activateMember(String id);
+        
 }

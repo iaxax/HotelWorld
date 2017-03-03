@@ -16,22 +16,22 @@
         <ul class="nav navbar-nav">
             <li class="active" id="nav-home">
                 <a href="javascript:void(0);"
-                   onclick="jump('/Hotel/pages/home.jsp');"
+                   onclick="window.location = '/Hotel/pages/home.jsp';"
                 >主页</a>
             </li>
             <li id="nav-track">
                 <a href="javascript:void(0);"
-                   onclick="jump('/Hotel/pages/reside.jsp');"
+                   onclick="window.location = '/Hotel/pages/reside.jsp';"
                 >住房</a>
             </li>
             <li id="nav-activity">
                 <a href="javascript:void(0);"
-                   onclick="jump('/Hotel/pages/member.jsp');"
+                   onclick="window.location = '/Hotel/pages/member.jsp';"
                 >会员</a>
             </li>
             <li id="nav-statistics">
                 <a href="javascript:void(0);"
-                   onclick="jump('/Hotel/pages/hotel.jsp');"
+                   onclick="window.location = '/Hotel/pages/hotel.jsp';"
                 >旅店</a>
             </li>
         </ul>

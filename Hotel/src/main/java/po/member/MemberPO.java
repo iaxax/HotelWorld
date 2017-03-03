@@ -17,8 +17,12 @@ import constant.MemberState;
 public class MemberPO {
 
         @Id
-        @GeneratedValue(strategy=GenerationType.AUTO)
+        @GeneratedValue(strategy=GenerationType.IDENTITY)
+        @Column(name="id")
         private Integer memberId;
+        
+        @Column(name="password")
+        private String password;
         
         @Column(name="name")
         private String name;
@@ -45,17 +49,16 @@ public class MemberPO {
         @Column(name="state")
         @Enumerated(EnumType.STRING)
         private MemberState state;
-        
+
         public MemberPO() {
                 super();
-                this.memberId = 0;
         }
 
-        public MemberPO(Integer memberId, String name, 
-                        String idNum, String phone, MemberRank rank, int balance,
-                        int consumption, int points, MemberState state) {
+        public MemberPO(Integer memberId, String password, String name, String idNum, String phone, MemberRank rank,
+                        int balance, int consumption, int points, MemberState state) {
                 super();
                 this.memberId = memberId;
+                this.password = password;
                 this.name = name;
                 this.idNum = idNum;
                 this.phone = phone;
@@ -72,6 +75,14 @@ public class MemberPO {
 
         public void setMemberId(Integer memberId) {
                 this.memberId = memberId;
+        }
+
+        public String getPassword() {
+                return password;
+        }
+
+        public void setPassword(String password) {
+                this.password = password;
         }
 
         public String getName() {
@@ -114,6 +125,14 @@ public class MemberPO {
                 this.balance = balance;
         }
 
+        public int getConsumption() {
+                return consumption;
+        }
+
+        public void setConsumption(int consumption) {
+                this.consumption = consumption;
+        }
+
         public int getPoints() {
                 return points;
         }
@@ -128,14 +147,6 @@ public class MemberPO {
 
         public void setState(MemberState state) {
                 this.state = state;
-        }
-
-        public int getConsumption() {
-                return consumption;
-        }
-
-        public void setConsumption(int consumption) {
-                this.consumption = consumption;
         }
         
 }

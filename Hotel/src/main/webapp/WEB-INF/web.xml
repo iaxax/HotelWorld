@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee" 
-         xmlns:web="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-         version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee">
-  <display-name>Hotel World</display-name>
-   
-   <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-   
-  <filter>
-        <filter-name>struts2-filter</filter-name>
-        <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
-  </filter>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee">
+ <display-name>Hotel World</display-name>
+ <filter>
+  <filter-name>loginfilter</filter-name>
+  <filter-class>filter.LoginFilter</filter-class>
+ </filter>
+ 
+ <filter>
+  <filter-name>struts2-filter</filter-name>
+  <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+ </filter>
+ 
+ <filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/activate_form.jsp</url-pattern>
+ </filter-mapping>
+ 
   <filter-mapping>
-        <filter-name>struts2-filter</filter-name>
-        <url-pattern>/*</url-pattern>
-  </filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/cancel_form.jsp</url-pattern>
+ </filter-mapping>
+ 
+  <filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/info.jsp</url-pattern>
+ </filter-mapping>
+ 
+  <filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/recharge_form.jsp</url-pattern>
+ </filter-mapping>
+ 
+  <filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/hotel.jsp</url-pattern>
+ </filter-mapping>
+ 
+  <filter-mapping>
+  <filter-name>loginfilter</filter-name>
+  <url-pattern>/pages/member/member.jsp</url-pattern>
+ </filter-mapping>
+ 
+ <filter-mapping>
+  <filter-name>struts2-filter</filter-name>
+  <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+ </listener>
+ <welcome-file-list>
+  <welcome-file>index.jsp</welcome-file>
+ </welcome-file-list>
 </web-app>

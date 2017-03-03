@@ -7,8 +7,6 @@
 <title>旅馆</title>
 </head>
 <body>
-        <%@include file="/pages/common/nav.jsp" %>
         
-        <%@include file="/pages/common/footer.html" %>
 </body>
 </html>

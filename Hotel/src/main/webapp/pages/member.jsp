@@ -13,40 +13,48 @@
 </style>
 </head>
 <body>
-        <%@include file="/pages/common/nav.jsp" %>
-        
         <div class="container">
                 <div class="row">
                         <div class="col-md-2 col-md-offset-1 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="注册会员" onclick="showRegisterForm('#form');">
-                                <p><a class="text-center" onclick="showRegisterForm('#form');">注册会员</a></p>
+                                        title="激活会员" onclick="insert('#form', '/Hotel/pages/member/activate_form.jsp');">
+                                <p><a class="text-center"
+                                         onclick="insert('#form', '/Hotel/pages/member/activate_form.jsp');"
+                                 >激活会员</a></p>
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="激活会员" onclick="showActivateForm('#form');">
-                                <p><a class="text-center" onclick="showActivateForm('#form');">激活会员</a></p>
+                                        title="取消会员" onclick="insert('#form', '/Hotel/pages/member/cancel_form.jsp');">
+                                <p><a class="text-center" 
+                                        onclick="insert('#form', '/Hotel/pages/member/cancel_form.jsp');">取消会员</a></p>
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="取消会员" onclick="showCancelForm('#form');">
-                                <p><a class="text-center" onclick="showCancelForm('#form');">取消会员</a></p>
+                                        title="会员充值" onclick="insert('#form', '/Hotel/pages/member/recharge_form.jsp');">
+                                <p><a class="text-center" onclick="insert('#form', '/Hotel/pages/member/recharge_form.jsp');">会员充值</a></p>
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="会员充值" onclick="showRechargeForm('#form');">
-                                <p><a class="text-center" onclick="showRechargeForm('#form');">会员充值</a></p>
+                                        title="会员信息" onclick="insert('#form', '/Hotel/pages/member/info.jsp');">
+                                <p><a class="text-center"
+                                         onclick="insert('#form', '/Hotel/pages/member/info.jsp');">会员信息</a></p>
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="会员信息" onclick="showInfo('#form');">
-                                <p><a class="text-center" onclick="showInfo('#form');">会员信息</a></p>
-                        </div>       
+                                        title="退出" onclick=";">
+                                <p><a class="text-center" onclick=";">退出</a></p>
+                        </div>
                 </div>
         </div>
         
         <div class="container block-gap">
                 <div id="form"></div>
         </div>
+        
+        <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
+	<script src="/Hotel/js/jquery.tmpl.min.js"></script>
+	<script src="/Hotel/js/bootstrap.min.js"></script>
+	<script src="/Hotel/js/util.js"></script>
+        <script src="/Hotel/js/register.js"></script>
 </body>
 </html>

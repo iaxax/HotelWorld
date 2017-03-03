@@ -15,16 +15,19 @@ public class RegisterVO implements Serializable {
         private String idCard;
         
         private String phone;
+        
+        private String password;
 
-        public RegisterVO(String name, String idCard, String phone) {
+        public RegisterVO() {
+                super();
+        }
+
+        public RegisterVO(String name, String idCard, String phone, String password) {
                 super();
                 this.name = name;
                 this.idCard = idCard;
                 this.phone = phone;
-        }
-
-        public RegisterVO() {
-                super();
+                this.password = password;
         }
 
         public String getName() {
@@ -50,10 +53,18 @@ public class RegisterVO implements Serializable {
         public void setPhone(String phone) {
                 this.phone = phone;
         }
-        
+
+        public String getPassword() {
+                return password;
+        }
+
+        public void setPassword(String password) {
+                this.password = password;
+        }
+
         public MemberPO toPO() {
                 return new MemberPO(
-                                null, this.name, this.idCard,
+                                null, this.password, this.name, this.idCard,
                                 this.phone, MemberRank.low,
                                 0, 0, 0, MemberState.pause
                 );

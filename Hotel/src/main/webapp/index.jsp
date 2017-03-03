@@ -1,15 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html>
 <head>
 <%@include file="/pages/common/meta.html" %>
-<title>Hotel World</title>
+<title>主页</title>
+<style>    
+        .button {
+                width: 60%;
+                margin-top: 20px;
+                margin-bottom: 10px;
+                margin-left: 40%;
+        }
+        
+        #title {
+                margin-top: 240px;
+                margin-bottom: 50px;
+        }
+</style>
 </head>
 <body>
-        <%@include file="/pages/common/nav.jsp" %>
+        <div class="container">
+                <div class="row">
+                        <div class="col-md-4">
+                                <img src="/Hotel/img/hotel.jpg">
+                                <div>
+                                        <button class="form-control btn btn-primary button text-center"
+                                                onclick="insert('#intro', '/Hotel/pages/login.jsp');"
+                                        >登录</button>
+                                </div>
+                                <div>
+                                        <button class="form-control btn btn-primary button text-center"
+                                                 onclick="insert('#intro', '/Hotel/pages/member/register_form.jsp');"
+                                        >会员创建 </button>
+                                </div>
+                        </div>
+                        
+                        <div class="col-md-8" id="intro">
+                                <h2 class="text-center" id="title">Hotel World</h2>
+                                <h4 class="text-center">
+                                        希望您享受本店之旅，在这里找到家的感觉
+                                </h4>
+                        </div>
+                </div>
+        </div>
         
-        <%@include file="/pages/common/footer.html" %>
+        <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
+        <script src="/Hotel/js/util.js"></script>
+        <script src="/Hotel/js/register.js"></script>
+        <script src="/Hotel/js/login.js"></script>
 </body>
 </html>

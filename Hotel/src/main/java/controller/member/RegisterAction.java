@@ -16,12 +16,16 @@ public class RegisterAction extends ActionSupport {
         
         private String phone;
         
+        private String password;
+        
         private Member member;
         
         private ResultVO result;
         
         public String register() {
-                result = member.register(new RegisterVO(name, idCard, phone));
+                result = member.register(new RegisterVO(
+                                name, idCard, phone, password
+                ));
                 return SUCCESS;
         }
 
@@ -63,5 +67,13 @@ public class RegisterAction extends ActionSupport {
 
         public void setResult(ResultVO result) {
                 this.result = result;
+        }
+
+        public String getPassword() {
+                return password;
+        }
+
+        public void setPassword(String password) {
+                this.password = password;
         }
 }

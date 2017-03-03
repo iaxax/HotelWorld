@@ -22,6 +22,7 @@ public class MemberDAOImpl implements MemberDAO {
                                 + "where state != 'discard' and id_card = '" + idCard + "'"
                 );
                 List<MemberPO> list = query.list();
+                session.close();
                 
                 return !list.isEmpty();
         }
@@ -43,6 +44,16 @@ public class MemberDAOImpl implements MemberDAO {
                 finally {
                         session.close();
                 }
+        }
+
+        @Override
+        public boolean isBankAccountValid(String id, String password) {
+                return false;
+        }
+
+        @Override
+        public ResultVO activateMember(String id) {
+                return null;
         }
 
 }

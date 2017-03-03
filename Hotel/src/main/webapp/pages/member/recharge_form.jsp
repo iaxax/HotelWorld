@@ -1,12 +1,15 @@
 <%@page pageEncoding="utf-8" %>
 
-<div class="text-center">
+<div class="text-center" id="rechargeForm">
         <h4 class="text-center input-gap">会员充值</h4>
-        <form class="input">
-                <input type="text" class="form-control input-gap"  placeholder="充值金额">
-                <input type="text" class="form-control input-gap"  placeholder="银行卡号">
-                <input type="password" class="form-control input-gap"  placeholder="银行卡密码">
-                <button class="form-control input-gap btn btn-success">充值</button>
-                <button class="form-control input-gap btn btn-warning">取消</button>
-        </form>
+        <h4 class="input-gap text-center" id="tip"></h4>
+        <div class="input">
+                <input type="text" class="form-control input-gap"  placeholder="充值金额(至少50)" id="money">
+                <input type="text" class="form-control input-gap"  placeholder="银行卡号" id="id">
+                <input type="password" class="form-control input-gap"  placeholder="银行卡密码" id="id">
+                <button class="form-control input-gap btn btn-success"
+                         onclick=";">确定</button>
+                <button class="form-control input-gap btn btn-warning"
+                         onclick="window.location = '/Hotel/pages/member.jsp';">取消</button>
+        </div>
 </div>
