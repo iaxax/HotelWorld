@@ -11,7 +11,12 @@ function submitLogin(tip, id, pw) {
 		data: vo,
 		success: function(result) {
 			if (result.success) {
-				window.location = result.url;
+				tip.css('color', 'green');
+				tip.html(result.msg);
+				setTimeout(function() {
+					tip.html('');
+					window.location = result.url;
+				}, 2000);
 			}
 			else {
 				showError(tip, result.msg);

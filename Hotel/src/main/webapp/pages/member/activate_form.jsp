@@ -8,7 +8,7 @@
                 <input type="text" class="form-control input-gap"  placeholder="银行卡号" id="id">
                 <input type="password" class="form-control input-gap"  placeholder="银行密码" id="pw">
                 <button class="form-control input-gap btn btn-success"
-                         onclick=";">激活</button>
+                         onclick="activateValidate();">激活</button>
                 <button class="form-control input-gap btn btn-warning"
                          onclick="window.location = '/Hotel/pages/member.jsp';">取消</button>
         </div>

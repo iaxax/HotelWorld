@@ -1,12 +1,5 @@
 
-function submitRegister(tip) {
-	var vo = {
-			"name": $('#name').val(),
-			"idCard": $('#idNum').val(),
-			"phone": $('#phone').val(),
-			"password": $('#pw').val()
-	}
-	
+function submitRegister(tip, vo) {
 	$.ajax({
 		url: '/Hotel/register.action',
 		method: 'post',
@@ -72,5 +65,12 @@ function registerValidate() {
 		return;
 	}
 	
-	submitRegister(tip);
+	var vo = {
+			"name": name,
+			"idCard": idNum,
+			"phone": phone,
+			"password": pw
+	}
+	
+	submitRegister(tip, vo);
 }

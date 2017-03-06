@@ -22,7 +22,7 @@ public class LoginBean implements Login {
                         return new LoginResultVO(true, ive.getMsg(), "/Hotel/pages/hotel.jsp");
                 }
                 
-                return new LoginResultVO(false, "账号与密码不匹配", "");
+                return new LoginResultVO(false, ivm.getMsg(), "");
         }
 
         public LoginDAO getLogin() {

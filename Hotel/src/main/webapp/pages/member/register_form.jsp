@@ -1,7 +1,7 @@
 <%@page pageEncoding="utf-8" %>
 
 <div class="text-center" id="registerForm" style="margin-top: 80px;">
-        <h4 class="text-center input-gap">会员办理</h4>
+        <h4 class="text-center input-gap">会员创建</h4>
         <h4 class="input-gap text-center" id="tip"></h4>
         <div class="input">
                 <input type="text" class="form-control input-gap"  placeholder="姓名" id="name">

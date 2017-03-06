@@ -2,8 +2,8 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
 "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-        <bean id="loginDAO" class="dao.impl.LoginDAOImpl" />
         <bean id="memberDAO" class="dao.impl.MemberDAOImpl" />
+        <bean id="loginDAO" class="dao.impl.LoginDAOImpl"/>
 
         <bean id="loginBean" class="service.impl.LoginBean">
                 <property name="login" ref="loginDAO" />
@@ -15,11 +15,17 @@
         <bean id="LoginAction" class="controller.LoginAction">
                 <property name="login" ref="loginBean" />
         </bean>
+        <bean id="LogoutAction" class="controller.LogoutAction"/>
         <bean id="RegisterAction" class="controller.member.RegisterAction">
                 <property name="member" ref="memberBean" />
         </bean>
         <bean id="ActivateAction" class="controller.member.ActivateAction">
                 <property name="member" ref="memberBean" />
         </bean>
-        
+        <bean id="CancelAction" class="controller.member.CancelAction">
+                <property name="member" ref="memberBean" />
+        </bean>
+        <bean id="RechargeAction" class="controller.member.RechargeAction">
+                <property name="member" ref="memberBean" />
+        </bean>
 </beans>

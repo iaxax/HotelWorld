@@ -12,7 +12,7 @@
                 </action>
         </package>
         
-        <package name="login" extends="struts-default,json-default">
+        <package name="verify" extends="struts-default,json-default">
                 <action name="login" class="LoginAction" method="login">
                         <interceptor-ref name="defaultStack"/>
                         <interceptor-ref name="json">
@@ -21,6 +21,10 @@
                         <result type="json">
                                 <param name="root">result</param>
                         </result>
+                </action>
+                
+                <action name="logout" class="LogoutAction" method="logout">
+                        <result name="success">/index.jsp</result>
                 </action>
         </package>
         
@@ -43,6 +47,19 @@
                         </result>
                 </action>
                 <action name="activate" class="ActivateAction" method="activate">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="cancel" class="CancelAction" method="cancel">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="recharge" class="RechargeAction" method="recharge">
+                        <result name="login">/index.jsp</result>
                         <result type="json">
                                 <param name="root">result</param>
                         </result>

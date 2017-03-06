@@ -23,15 +23,12 @@ public class LoginAction extends ActionSupport {
         
         private Login login;
         
-        public static String USER_ID;
-        
         public String login() {
                 result = login.login(new LoginVO(id, pw));
                 if (result.isSuccess()) {
                         HttpServletRequest request = ServletActionContext.getRequest();
                         HttpSession session = request.getSession(true);
                         session.setAttribute("id", id);
-                        USER_ID = id;
                 }
                 return SUCCESS;
         }

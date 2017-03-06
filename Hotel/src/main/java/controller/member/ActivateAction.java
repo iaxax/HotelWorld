@@ -1,8 +1,12 @@
 package controller.member;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionSupport;
 
-import controller.LoginAction;
 import service.intf.Member;
 import vo.member.ActivateVO;
 import vo.result.ResultVO;
@@ -22,8 +26,14 @@ public class ActivateAction extends ActionSupport {
         private Member member;
         
         public String activate() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
                 result = member.activate(new ActivateVO(
-                                LoginAction.USER_ID, money, accountId, accountPw
+                                (String)session.getAttribute("id"),
+                                money, accountId, accountPw
                 ));
                 return SUCCESS;
         }
