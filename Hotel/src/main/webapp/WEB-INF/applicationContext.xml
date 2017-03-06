@@ -4,12 +4,18 @@
 <beans>
         <bean id="memberDAO" class="dao.impl.MemberDAOImpl" />
         <bean id="loginDAO" class="dao.impl.LoginDAOImpl"/>
+        <bean id="hotelDAO" class="dao.impl.HotelDAOImpl">
+                <property name="member" ref="memberDAO" />
+        </bean>
 
         <bean id="loginBean" class="service.impl.LoginBean">
                 <property name="login" ref="loginDAO" />
         </bean>       
         <bean id="memberBean" class="service.impl.MemberBean">
                 <property name="member" ref="memberDAO" />
+        </bean>
+        <bean id="hotelBean" class="service.impl.HotelBean">
+                <property name="hotel" ref="hotelDAO" />
         </bean>
         
         <bean id="LoginAction" class="controller.LoginAction">
@@ -27,5 +33,11 @@
         </bean>
         <bean id="RechargeAction" class="controller.member.RechargeAction">
                 <property name="member" ref="memberBean" />
+        </bean>
+        <bean id="RoomBookAction" class="controller.hotel.RoomBookAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
+        <bean id="BookCancelAction" class="controller.hotel.BookCancelAction">
+                <property name="hotel" ref="hotelBean" />
         </bean>
 </beans>

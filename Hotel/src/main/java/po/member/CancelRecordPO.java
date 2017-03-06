@@ -4,29 +4,29 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import po.pk.CancelPK;
+import po.pk.CanceCardlPK;
 
 @Entity
 @Table(name="card_discard")
 public class CancelRecordPO {
 
         @EmbeddedId
-        private CancelPK pk;
+        private CanceCardlPK pk;
 
         public CancelRecordPO() {
                 super();
         }
 
-        public CancelRecordPO(CancelPK pk) {
+        public CancelRecordPO(CanceCardlPK pk) {
                 super();
                 this.pk = pk;
         }
 
-        public CancelPK getPk() {
+        public CanceCardlPK getPk() {
                 return pk;
         }
 
-        public void setPk(CancelPK pk) {
+        public void setPk(CanceCardlPK pk) {
                 this.pk = pk;
         }
         

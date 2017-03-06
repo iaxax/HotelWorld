@@ -65,4 +65,43 @@
                         </result>
                 </action>
         </package>
+        
+        <package name="hotel" extends="struts-default,json-default">
+        
+                <interceptors>
+                        <interceptor-stack name="hotelStack">
+                                <interceptor-ref name="defaultStack"/>
+                                <interceptor-ref name="json">
+                                        <param name="enableSMD">true</param>
+                                </interceptor-ref>
+                        </interceptor-stack>
+                </interceptors>
+                
+                <default-interceptor-ref name="hotelStack"/>
+                
+                <action name="roomBook" class="RoomBookAction" method="book">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getInfo" class="RoomBookAction" method="getInfo">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">roomInfo</param>
+                        </result>
+                </action>
+                <action name="roomCancel" class="BookCancelAction" method="cancel">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getBookRooms" class="BookCancelAction" method="getBookRooms">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">bookList</param>
+                        </result>
+                </action>
+        </package>
  </struts>

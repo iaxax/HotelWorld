@@ -14,7 +14,7 @@ import po.member.CancelRecordPO;
 import po.member.MemberPO;
 import po.member.RegisterRecordPO;
 import po.pk.ActivatePK;
-import po.pk.CancelPK;
+import po.pk.CanceCardlPK;
 import po.pk.RegisterPK;
 import util.DBUtil;
 import util.TimeUtil;
@@ -88,10 +88,16 @@ public class MemberDAOImpl implements MemberDAO {
                         );
                         accQuery.executeUpdate();
                         
+                        session.createQuery(
+                                        "update po.member.MemberPO "
+                                        + "set balance = " + vo.getMoney()
+                                        + " where memberId = " + vo.getMemberId()
+                        ).executeUpdate();
+                        
                         Query<?> stateQuery = session.createQuery(
                                         "update po.member.MemberPO "
                                         + "set state = '" + MemberState.activate + "' "
-                                        + "where id = '" + vo.getMemberId() + "'"
+                                        + "where memberId = " + vo.getMemberId()
                         );
                         stateQuery.executeUpdate();
                         
@@ -134,7 +140,7 @@ public class MemberDAOImpl implements MemberDAO {
                 Session session = DBUtil.getSession();
                 @SuppressWarnings("unchecked")
                 Query<MemberPO> query = session.createQuery(
-                                "from po.member.MemberPO where id = '" + id + "'"
+                                "from po.member.MemberPO where memberId = " + id
                 );
                 List<MemberPO> list = query.list();
                 session.close();
@@ -186,7 +192,7 @@ public class MemberDAOImpl implements MemberDAO {
                         accQuery.executeUpdate();
                         
                         session.save(new CancelRecordPO(
-                                        new CancelPK(vo.getMemberId(), TimeUtil.getCurrentTime())
+                                        new CanceCardlPK(vo.getMemberId(), TimeUtil.getCurrentTime())
                         ));
                         
                         transaction.commit();

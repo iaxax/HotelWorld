@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class CancelPK implements Serializable {
+public class CanceCardlPK implements Serializable {
 
         private static final long serialVersionUID = -2406173023162055030L;
 
@@ -16,11 +16,11 @@ public class CancelPK implements Serializable {
         @Column(name="disc_time")
         private String time;
 
-        public CancelPK() {
+        public CanceCardlPK() {
                 super();
         }
 
-        public CancelPK(String memberId, String time) {
+        public CanceCardlPK(String memberId, String time) {
                 super();
                 this.memberId = memberId;
                 this.time = time;

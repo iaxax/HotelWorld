@@ -43,15 +43,15 @@
                     <div class="row">
                         <div class="col-md-2 col-md-offset-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="房间预订" onclick="insert('#form', '/Hotel/pages/member/recharge_form.jsp');">
-                                <p><a class="text-center" onclick="insert('#form', '/Hotel/pages/member/recharge_form.jsp');"
+                                        title="房间预订" onclick="insert('#form', '/Hotel/pages/member/room_book.jsp');">
+                                <p><a class="text-center" onclick="insert('#form', '/Hotel/pages/member/room_book.jsp');"
                                 >房间预订</a></p>
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="房间退订" onclick="insert('#form', '/Hotel/pages/member/info.jsp');">
+                                        title="房间退订" onclick="insert('#form', '/Hotel/pages/member/book_cancel.jsp');">
                                 <p><a class="text-center"
-                                         onclick="insert('#form', '/Hotel/pages/member/info.jsp');"
+                                         onclick="insert('#form', '/Hotel/pages/member/book_cancel.jsp');"
                                  >房间退订</a></p>
                         </div>
                         <div class="col-md-2 text-center">
@@ -74,5 +74,7 @@
         <script src="/Hotel/js/activate.js"></script>
         <script src="/Hotel/js/cancel.js"></script>
         <script src="/Hotel/js/recharge.js"></script>
+        <script src="/Hotel/js/room_book.js"></script>
+        <script src="/Hotel/js/room_cancel.js"></script>
 </body>
 </html>
