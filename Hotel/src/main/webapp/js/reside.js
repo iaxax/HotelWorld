@@ -8,7 +8,7 @@ function showRoomPrice(roomNum) {
 		success: function(result) {
 			var price = $('#price');
 			price.css('color', 'green');
-			price.html('此次入住需要' + result + '元');
+			price.html('房间价格为' + result + '元/日');
 		}
 	});
 }

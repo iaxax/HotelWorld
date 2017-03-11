@@ -41,6 +41,7 @@ public class ResideRegAction extends ActionSupport {
                 }
                 
                 rooms = hotel.getBookRooms(memberId);
+                memberId = null;
                 return SUCCESS;
         }
         

@@ -7,6 +7,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import po.CreditCardPO;
+import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
 import po.hotel.CancelBookRecordPO;
 import po.hotel.EmployeePO;
@@ -17,6 +18,7 @@ import po.member.CancelRecordPO;
 import po.member.MemberPO;
 import po.member.RegisterRecordPO;
 import po.pk.ActivatePK;
+import po.pk.AwayPK;
 import po.pk.CanceCardlPK;
 import po.pk.CancelBookPK;
 import po.pk.RegisterPK;
@@ -44,7 +46,9 @@ public class DBUtil {
                         .addAnnotatedClass(CancelBookRecordPO.class)
                         .addAnnotatedClass(CancelBookPK.class)
                         .addAnnotatedClass(ResidePK.class)
-                        .addAnnotatedClass(ResideRecordPO.class);
+                        .addAnnotatedClass(ResideRecordPO.class)
+                        .addAnnotatedClass(AwayPK.class)
+                        .addAnnotatedClass(AwayRecordPO.class);
         }
         
         private static ServiceRegistry sr = new StandardServiceRegistryBuilder()

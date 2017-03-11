@@ -3,6 +3,7 @@ package service.intf;
 import java.util.List;
 import java.util.Map;
 
+import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.ResideVO;
@@ -23,4 +24,8 @@ public interface Hotel {
         ResultVO resideRegister(ResideVO vo);
         
         int getRoomPrice(String empId, String roomNum);
+        
+        ResultVO awayRegister(AwayVO vo);
+        
+        List<String> getResideRooms(String empId, String idNum);
 }

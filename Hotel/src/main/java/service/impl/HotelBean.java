@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dao.intf.HotelDAO;
 import service.intf.Hotel;
+import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.ResideVO;
@@ -51,6 +52,16 @@ public class HotelBean implements Hotel {
         @Override
         public int getRoomPrice(String empId, String roomNum) {
                 return hotel.getRoomPrice(empId, roomNum);
+        }
+
+        @Override
+        public ResultVO awayRegister(AwayVO vo) {
+                return hotel.awayRegister(vo);
+        }
+
+        @Override
+        public List<String> getResideRooms(String empId, String idNum) {
+                return hotel.getResideRooms(empId, idNum);
         }
 
 }

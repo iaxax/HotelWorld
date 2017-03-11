@@ -18,9 +18,9 @@
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="离店登记" onclick="insert('#form', '/Hotel/pages/member/cancel_form.jsp');">
+                                        title="离店登记" onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');">
                                 <p><a class="text-center" 
-                                        onclick="insert('#form', '/Hotel/pages/member/cancel_form.jsp');"
+                                        onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');"
                                 >离店登记</a></p>
                         </div>
                         <div class="col-md-2 text-center">
@@ -39,5 +39,6 @@
         <script src="/Hotel/js/bootstrap.min.js"></script>
         <script src="/Hotel/js/util.js"></script>
         <script src="/Hotel/js/reside.js"></script>
+        <script src="/Hotel/js/away.js"></script>
 </body>
 </html>

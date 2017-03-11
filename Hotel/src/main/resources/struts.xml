@@ -141,5 +141,17 @@
                                 <param name="root">roomPrice</param>
                         </result>
                 </action>
+                <action name="away" class="AwayRegAction" method="away">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getResideRooms" class="AwayRegAction" method="getResideRooms">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">rooms</param>
+                        </result>
+                </action>
         </package>
  </struts>
