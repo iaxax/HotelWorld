@@ -1,12 +1,12 @@
 
-function submitLogin(tip, id, pw) {
+function submitLogin(tip, id, pw, action) {
 	var vo = {
 			"id": id,
 			"pw": pw
 	};
 	
 	$.ajax({
-		url: '/Hotel/login.action',
+		url: action,
 		method: 'post',
 		data: vo,
 		success: function(result) {
@@ -25,18 +25,40 @@ function submitLogin(tip, id, pw) {
 	});
 }
 
-function loginValidate(tip) {
-	var id = $('#id').val();
+function inputValidate(tip, id, pw) {
 	if (id.length == 0) {
 		showError(tip, '账号不能为空');
-		return;
+		return false;
 	}
 	
-	var pw = $('#pw').val();
 	if (pw.length == 0) {
 		showError(tip, '密码不能为空');
+		return false;
+	}
+	
+	return true;
+}
+
+function emplLogin() {
+	var tip = $('#tip');
+	var id = $('#id').val();
+	var pw = $('#pw').val();
+	
+	if (inputValidate(tip, id, pw) == false) {
 		return;
 	}
 	
-	submitLogin(tip, id, pw)
+	submitLogin(tip, id, pw, '/Hotel/emplLogin.action');
+}
+
+function memberLogin() {
+	var tip = $('#tip');
+	var id = $('#id').val();
+	var pw = $('#pw').val();
+	
+	if (inputValidate(tip, id, pw) == false) {
+		return;
+	}
+	
+	submitLogin(tip, id, pw, '/Hotel/memberLogin.action');
 }

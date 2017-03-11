@@ -11,18 +11,14 @@ public class LoginBean implements Login {
         private LoginDAO login;
 
         @Override
-        public LoginResultVO login(LoginVO vo) {
+        public LoginResultVO memberLogin(LoginVO vo) {
                 ResultVO ivm = login.isValidMember(vo.toPO());
-                if (ivm.isSuccess()) {
-                        return new LoginResultVO(true, ivm.getMsg(), "/Hotel/pages/member.jsp");
-                }
-                
-                ResultVO ive = login.isValidEmployee(vo.toPO());
-                if (ive.isSuccess()) {
-                        return new LoginResultVO(true, ive.getMsg(), "/Hotel/pages/hotel.jsp");
-                }
-                
-                return new LoginResultVO(false, ivm.getMsg(), "");
+                return new LoginResultVO(ivm.isSuccess(), ivm.getMsg(), "");
+        }
+        
+        @Override
+        public LoginResultVO emplLogin(LoginVO vo) {
+                return login.isValidEmployee(vo.toPO());
         }
 
         public LoginDAO getLogin() {

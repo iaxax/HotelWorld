@@ -4,5 +4,7 @@ import vo.LoginVO;
 import vo.result.LoginResultVO;
 
 public interface Login {
-        LoginResultVO login(LoginVO vo);
+        LoginResultVO memberLogin(LoginVO vo);
+        
+        LoginResultVO emplLogin(LoginVO vo);
 }

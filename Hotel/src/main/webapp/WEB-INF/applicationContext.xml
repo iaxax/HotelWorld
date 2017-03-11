@@ -40,4 +40,7 @@
         <bean id="BookCancelAction" class="controller.hotel.BookCancelAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
+        <bean id="ResideRegAction" class="controller.hotel.ResideRegAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
 </beans>

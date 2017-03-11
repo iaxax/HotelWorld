@@ -3,6 +3,8 @@ package po.hotel;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import constant.RoomState;
@@ -19,6 +21,7 @@ public class RoomPO {
         private int price;
         
         @Column(name="state")
+        @Enumerated(EnumType.STRING)
         private RoomState state;
 
         public RoomPO() {

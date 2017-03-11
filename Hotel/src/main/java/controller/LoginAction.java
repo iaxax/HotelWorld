@@ -7,6 +7,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import constant.EmployeeRank;
 import service.intf.Login;
 import vo.LoginVO;
 import vo.result.LoginResultVO;
@@ -23,8 +24,30 @@ public class LoginAction extends ActionSupport {
         
         private Login login;
         
-        public String login() {
-                result = login.login(new LoginVO(id, pw));
+        public String memberLogin() {
+                result = login.memberLogin(new LoginVO(id, pw));
+                result.setUrl("/Hotel/pages/member.jsp");
+                if (result.isSuccess()) {
+                        HttpServletRequest request = ServletActionContext.getRequest();
+                        HttpSession session = request.getSession(true);
+                        session.setAttribute("id", id);
+                }
+                return SUCCESS;
+        }
+        
+        public String emplLogin() {
+                result = login.emplLogin(new LoginVO(id, pw));
+                String url = result.getUrl();
+                if (url.equals(EmployeeRank.ceo.toString())) {
+                        result.setUrl("/Hotel/pages/ceo.jsp");
+                }
+                else if (url.equals(EmployeeRank.manager.toString())) {
+                        result.setUrl("/Hotel/pages/manager.jsp");
+                }
+                else if(url.equals(EmployeeRank.staff.toString())) {
+                        result.setUrl("/Hotel/pages/staff.jsp");
+                }
+                
                 if (result.isSuccess()) {
                         HttpServletRequest request = ServletActionContext.getRequest();
                         HttpSession session = request.getSession(true);

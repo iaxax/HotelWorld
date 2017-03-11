@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="退出" onclick=";">
+                                        title="退出" onclick="window.location= '/Hotel/logout.action';">
                                 <p><a class="text-center" onclick="window.location= '/Hotel/logout.action';">退出</a></p>
                         </div>
                 </div>
@@ -67,7 +67,6 @@
         </div>
         
         <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
-	<script src="/Hotel/js/jquery.tmpl.min.js"></script>
 	<script src="/Hotel/js/bootstrap.min.js"></script>
 	<script src="/Hotel/js/util.js"></script>
         <script src="/Hotel/js/register.js"></script>

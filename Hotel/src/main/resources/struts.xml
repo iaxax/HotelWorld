@@ -13,11 +13,25 @@
         </package>
         
         <package name="verify" extends="struts-default,json-default">
-                <action name="login" class="LoginAction" method="login">
-                        <interceptor-ref name="defaultStack"/>
-                        <interceptor-ref name="json">
-                                <param name="enableSMD">true</param>
-                        </interceptor-ref>
+        
+                <interceptors>
+                        <interceptor-stack name="hotelStack">
+                                <interceptor-ref name="defaultStack"/>
+                                <interceptor-ref name="json">
+                                        <param name="enableSMD">true</param>
+                                </interceptor-ref>
+                        </interceptor-stack>
+                </interceptors>
+                
+                <default-interceptor-ref name="hotelStack"/>
+                
+                <action name="memberLogin" class="LoginAction" method="memberLogin">
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                
+                <action name="emplLogin" class="LoginAction" method="emplLogin">
                         <result type="json">
                                 <param name="root">result</param>
                         </result>
@@ -91,6 +105,12 @@
                                 <param name="root">roomInfo</param>
                         </result>
                 </action>
+                <action name="getRooms" class="RoomBookAction" method="getRooms">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">roomList</param>
+                        </result>
+                </action>
                 <action name="roomCancel" class="BookCancelAction" method="cancel">
                         <result name="login">/index.jsp</result>
                         <result type="json">
@@ -101,6 +121,24 @@
                         <result name="login">/index.jsp</result>
                         <result type="json">
                                 <param name="root">bookList</param>
+                        </result>
+                </action>
+                <action name="getBookRoomsAtReside" class="ResideRegAction" method="getBookRoomsAtReside">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">rooms</param>
+                        </result>
+                </action>
+                <action name="reside" class="ResideRegAction" method="reside">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getPrice" class="ResideRegAction" method="getPrice">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">roomPrice</param>
                         </result>
                 </action>
         </package>

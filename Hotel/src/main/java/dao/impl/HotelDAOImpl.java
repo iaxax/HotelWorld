@@ -10,16 +10,25 @@ import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 
 import constant.BookingState;
+import constant.MemberRank;
+import constant.ResideState;
+import constant.RoomState;
 import dao.intf.HotelDAO;
 import dao.intf.MemberDAO;
 import po.hotel.BookRecordPO;
 import po.hotel.CancelBookRecordPO;
+import po.hotel.EmployeePO;
+import po.hotel.ResideRecordPO;
+import po.hotel.RoomPO;
+import po.member.MemberPO;
 import po.pk.BookingPK;
 import po.pk.CancelBookPK;
+import po.pk.ResidePK;
 import util.DBUtil;
 import util.TimeUtil;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.ResideVO;
 import vo.result.ResultVO;
 
 public class HotelDAOImpl implements HotelDAO {
@@ -191,6 +200,158 @@ public class HotelDAOImpl implements HotelDAO {
                 }
                 session.close();
                 return result;
+        }
+
+        @Override
+        public List<String> getAvailableRooms(String id) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<EmployeePO> empList = session.createQuery(
+                                "from po.hotel.EmployeePO "
+                                + "where id = '" + id + "'"
+                ).list();
+                session.close();
+                
+                EmployeePO empl = empList.get(0);
+                String hotel = empl.getHotel();
+                Map<String, List<String>> info = getRoomInfo();
+                return info.get(hotel);
+        }
+
+        @Override
+        public ResultVO resideRegister(ResideVO vo) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                try {
+                        @SuppressWarnings("unchecked")
+                        List<ResideRecordPO> recList = session.createQuery(
+                                        "from po.hotel.ResideRecordPO "
+                                        + "where timestampdiff(day, pk.arriveTime, now()) > days"
+                        ).list();
+                        for (ResideRecordPO po : recList) {
+                                po.setState(ResideState.leave);
+                                session.update(po);
+                                session.createQuery(
+                                                "update po.hotel.RoomPO "
+                                                + "set state = 'free' "
+                                                + "where pk.hotel = '" + po.getHotel() + "' and "
+                                                + "pk.room = '" + po.getRoom() + "'"
+                                ).executeUpdate();
+                        }         
+                        
+                        EmployeePO empl = (EmployeePO) session.createQuery(
+                                        "from po.hotel.EmployeePO "
+                                        + "where id = '" + vo.getEmpId() + "'"
+                        ).list().get(0);
+                        String hotel = empl.getHotel();
+                        
+                        RoomPO room = (RoomPO) session.createQuery(
+                                        "from po.hotel.RoomPO "
+                                        + "where pk.hotel = '" + hotel + "' and "
+                                        + "pk.room = '" + vo.getRoom() + "'"
+                        ).list().get(0);
+                        int price = room.getPrice();
+                        
+                        if (vo.getMemberId() == null) {
+                                room.setState(RoomState.rented);
+                                session.update(room);
+                                
+                                session.save(new ResideRecordPO(
+                                                new ResidePK(vo.getRegistrant(), TimeUtil.getCurrentTime()),
+                                                vo.getMemberId(), null, price, hotel, vo.getRoom(),
+                                                vo.getDays(), ResideState.reside
+                                ));
+                        }
+                        else {
+                               MemberPO member = (MemberPO) session.createQuery(
+                                               "from po.member.MemberPO "
+                                               + "where memberId = " + vo.getMemberId()
+                               ).list().get(0);
+                               
+                               double discount = 1.0;
+                               switch(member.getRank()) {
+                               case high:
+                                       discount = 0.8; break;
+                               case mid:
+                                       discount = 0.9; break;
+                               case low:
+                                       discount = 1.0;  break;
+                               }
+                               int actualPrice = (int)(price * discount);
+                               int balance = member.getBalance();
+                               if (balance < actualPrice) {
+                                       transaction.commit();
+                                       return new ResultVO(false, "会员卡余额不足,请前去充值");
+                               }
+                               
+                               balance -= actualPrice;
+                               int consume = member.getConsumption();
+                               consume += actualPrice;
+                               if (consume > 2000) {
+                                       member.setRank(MemberRank.high);
+                               }
+                               else if (consume > 1000) {
+                                       member.setRank(MemberRank.mid);
+                               }
+                               int points = member.getPoints();
+                               points += actualPrice / 100;
+                               
+                               member.setConsumption(consume);
+                               member.setBalance(balance);
+                               member.setPoints(points);
+                               session.save(member);
+                               
+                               BookRecordPO bookRec = (BookRecordPO) session.createQuery(
+                                               "from po.hotel.BookRecordPO "
+                                               + "where pk.memberId = '" + member.getMemberId() + "' "
+                                               + "and hotel = '" + hotel + "' "
+                                               + "and room = '" + vo.getRoom() + "' "
+                                               + "order by pk.bookTime desc"
+                               ).list().get(0);
+                               
+                               session.createQuery(
+                                               "update po.hotel.BookRecordPO "
+                                               + "set state = '" + BookingState.inside + "'"
+                               ).executeUpdate();
+                               
+                               session.save(new ResideRecordPO(
+                                               new ResidePK(member.getIdNum(), TimeUtil.getCurrentTime()),
+                                               vo.getMemberId(), bookRec.getPk().getBookTime(),
+                                               actualPrice, hotel, vo.getRoom(), vo.getDays(), ResideState.reside
+                               ));
+                        }
+                        
+                        transaction.commit();
+                        return new ResultVO(true, "入店登记成功");
+                }
+                catch (Exception e) {
+                        e.printStackTrace();
+                        transaction.rollback();
+                        return new ResultVO(false, "入店登记失败");
+                }
+                finally {
+                        session.close();
+                }
+        }
+
+        @Override
+        public int getRoomPrice(String empId, String roomNum) {
+                Session session = DBUtil.getSession();
+                
+                EmployeePO empl = (EmployeePO) session.createQuery(
+                                "from po.hotel.EmployeePO "
+                                + "where id = '" + empId + "'"
+                ).list().get(0);
+                
+                String hotel = empl.getHotel();
+                RoomPO room = (RoomPO) session.createQuery(
+                                "from po.hotel.RoomPO "
+                                + "where pk.hotel = '" + hotel + "' and "
+                                + "pk.room = '" + roomNum + "'"
+                ).list().get(0);
+                
+                session.close();
+                return room.getPrice();
         }
 
 }

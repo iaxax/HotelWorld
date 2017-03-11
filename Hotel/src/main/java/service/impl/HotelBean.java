@@ -7,6 +7,7 @@ import dao.intf.HotelDAO;
 import service.intf.Hotel;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.ResideVO;
 import vo.result.ResultVO;
 
 public class HotelBean implements Hotel {
@@ -35,6 +36,21 @@ public class HotelBean implements Hotel {
         @Override
         public List<String> getBookRooms(String id) {
                 return hotel.getBookRooms(id);
+        }
+
+        @Override
+        public List<String> getAvailableRooms(String id) {
+                return hotel.getAvailableRooms(id);
+        }
+
+        @Override
+        public ResultVO resideRegister(ResideVO vo) {
+                return hotel.resideRegister(vo);
+        }
+
+        @Override
+        public int getRoomPrice(String empId, String roomNum) {
+                return hotel.getRoomPrice(empId, roomNum);
         }
 
 }

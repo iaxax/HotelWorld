@@ -9,24 +9,35 @@ import org.hibernate.query.Query;
 import constant.MemberState;
 import dao.intf.LoginDAO;
 import po.LoginPO;
+import po.hotel.EmployeePO;
 import po.member.ActivateRecordPO;
 import po.member.MemberPO;
 import po.member.RegisterRecordPO;
 import util.DBUtil;
 import util.TimeUtil;
+import vo.result.LoginResultVO;
 import vo.result.ResultVO;
 
 public class LoginDAOImpl implements LoginDAO {
         
         @Override
         public ResultVO isValidMember(LoginPO po) {
+                String id = po.getId();
+                
+                try {
+                        Integer.parseInt(id);
+                }
+                catch (Exception e) {
+                        return new ResultVO(false, "账户与密码不匹配");
+                }
+                
                 Session session = DBUtil.getSession();
                 @SuppressWarnings("unchecked")
                 Query<MemberPO> validQuery = session.createQuery(
                                 "from po.member.MemberPO "
                                 + "where state != 'discard' and "
-                                + "((memberId=" + po.getId() + " and password='" + po.getPw() + "') or "
-                                + "(idNum=" + po.getId() + " and password='" + po.getPw() + "'))"
+                                + "((memberId=" + id + " and password='" + po.getPw() + "') or "
+                                + "(idNum='" + id + "' and password='" + po.getPw() + "'))"
                 );
                 List<MemberPO> list = validQuery.list();
                 if (list.isEmpty()) {
@@ -86,22 +97,20 @@ public class LoginDAOImpl implements LoginDAO {
         }
 
         @Override
-        public ResultVO isValidEmployee(LoginPO po) {
-                return isValidAccount(
+        public LoginResultVO isValidEmployee(LoginPO po) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<EmployeePO> list  = session.createQuery(
                                 "from po.hotel.EmployeePO "
                                 + "where id='" + po.getId() + "' and password='" + po.getPw() + "'"
-                );
-        }
-        
-        private ResultVO isValidAccount(String hql) {
-                Session session = DBUtil.getSession();
-                Query<?> query = session.createQuery(hql);
-                List<?> list = query.list();
+                ).list();
                 session.close();
                 if (list.isEmpty()) {
-                        return new ResultVO(false, "账号与密码不匹配");
+                        return new LoginResultVO(false, "账号与密码不匹配", "");
                 }
-                return new ResultVO(true, "登录成功");
+                else {
+                        return new LoginResultVO(true, "登录成功", list.get(0).getRank().toString());
+                }
         }
 
 }

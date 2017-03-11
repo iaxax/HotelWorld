@@ -26,6 +26,8 @@ public class RoomBookAction extends ActionSupport {
         
         private Map<String, List<String>> roomInfo;
         
+        private List<String> roomList;
+        
         private ResultVO result;
         
         private Hotel hotel;
@@ -51,6 +53,17 @@ public class RoomBookAction extends ActionSupport {
                 }
                         
                 roomInfo = hotel.getRoomInfo();
+                return SUCCESS;
+        }
+        
+        public String getRooms() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                roomList = hotel.getAvailableRooms((String)session.getAttribute("id"));
                 return SUCCESS;
         }
         
@@ -100,6 +113,14 @@ public class RoomBookAction extends ActionSupport {
 
         public void setRoomInfo(Map<String, List<String>> roomInfo) {
                 this.roomInfo = roomInfo;
+        }
+
+        public List<String> getRoomList() {
+                return roomList;
+        }
+
+        public void setRoomList(List<String> roomList) {
+                this.roomList = roomList;
         }
         
 }

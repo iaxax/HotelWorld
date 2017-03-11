@@ -10,7 +10,7 @@
                 width: 60%;
                 margin-top: 20px;
                 margin-bottom: 10px;
-                margin-left: 40%;
+                margin-left: 30%;
         }
         
         #title {
@@ -23,16 +23,21 @@
         <div class="container">
                 <div class="row">
                         <div class="col-md-4">
-                                <img src="/Hotel/img/hotel.jpg">
+                                <img src="/Hotel/img/hotel.jpg" style="height: 400px;">
                                 <div>
                                         <button class="form-control btn btn-primary button text-center"
-                                                onclick="insert('#intro', '/Hotel/pages/login.jsp');"
-                                        >登录</button>
+                                                onclick="insert('#intro', '/Hotel/pages/member_login.jsp');"
+                                        >会员登录</button>
+                                </div>
+                                <div>
+                                        <button class="form-control btn btn-primary button text-center"
+                                                 onclick="insert('#intro', '/Hotel/pages/empl_login.jsp');"
+                                        >员工登录</button>
                                 </div>
                                 <div>
                                         <button class="form-control btn btn-primary button text-center"
                                                  onclick="insert('#intro', '/Hotel/pages/member/register_form.jsp');"
-                                        >会员创建 </button>
+                                        >会员创建</button>
                                 </div>
                         </div>
                         
