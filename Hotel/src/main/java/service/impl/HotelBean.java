@@ -8,6 +8,7 @@ import service.intf.Hotel;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
 
@@ -62,6 +63,11 @@ public class HotelBean implements Hotel {
         @Override
         public List<String> getResideRooms(String empId, String idNum) {
                 return hotel.getResideRooms(empId, idNum);
+        }
+
+        @Override
+        public ResultVO publishPlan(PlanVO vo) {
+                return hotel.publishPlan(vo);
         }
 
 }

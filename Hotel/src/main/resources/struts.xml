@@ -153,5 +153,11 @@
                                 <param name="root">rooms</param>
                         </result>
                 </action>
+                <action name="publishPlan" class="PlanAction" method="publishPlan">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
         </package>
  </struts>

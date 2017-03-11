@@ -1,5 +1,5 @@
 package constant;
 
 public enum PlanState {
-        effect,uneffect
+        approval, disapproval, unread
 }

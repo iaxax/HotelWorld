@@ -46,4 +46,7 @@
         <bean id="AwayRegAction" class="controller.hotel.AwayRegAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
+        <bean id="PlanAction" class="controller.hotel.PlanAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
 </beans>

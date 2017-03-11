@@ -6,6 +6,7 @@ import java.util.Map;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
 
@@ -28,4 +29,6 @@ public interface Hotel {
         ResultVO awayRegister(AwayVO vo);
         
         List<String> getResideRooms(String empId, String idNum);
+        
+        ResultVO publishPlan(PlanVO vo);
 }

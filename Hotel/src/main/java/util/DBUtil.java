@@ -11,6 +11,7 @@ import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
 import po.hotel.CancelBookRecordPO;
 import po.hotel.EmployeePO;
+import po.hotel.PlanPO;
 import po.hotel.ResideRecordPO;
 import po.hotel.RoomPO;
 import po.member.ActivateRecordPO;
@@ -21,6 +22,7 @@ import po.pk.ActivatePK;
 import po.pk.AwayPK;
 import po.pk.CanceCardlPK;
 import po.pk.CancelBookPK;
+import po.pk.PlanPK;
 import po.pk.RegisterPK;
 import po.pk.ResidePK;
 import po.pk.RoomPK;
@@ -48,7 +50,9 @@ public class DBUtil {
                         .addAnnotatedClass(ResidePK.class)
                         .addAnnotatedClass(ResideRecordPO.class)
                         .addAnnotatedClass(AwayPK.class)
-                        .addAnnotatedClass(AwayRecordPO.class);
+                        .addAnnotatedClass(AwayRecordPO.class)
+                        .addAnnotatedClass(PlanPK.class)
+                        .addAnnotatedClass(PlanPO.class);
         }
         
         private static ServiceRegistry sr = new StandardServiceRegistryBuilder()

@@ -11,6 +11,7 @@ import org.hibernate.query.NativeQuery;
 
 import constant.BookingState;
 import constant.MemberRank;
+import constant.PlanState;
 import constant.ResideState;
 import constant.RoomState;
 import dao.intf.HotelDAO;
@@ -19,18 +20,21 @@ import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
 import po.hotel.CancelBookRecordPO;
 import po.hotel.EmployeePO;
+import po.hotel.PlanPO;
 import po.hotel.ResideRecordPO;
 import po.hotel.RoomPO;
 import po.member.MemberPO;
 import po.pk.AwayPK;
 import po.pk.BookingPK;
 import po.pk.CancelBookPK;
+import po.pk.PlanPK;
 import po.pk.ResidePK;
 import util.DBUtil;
 import util.TimeUtil;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
 
@@ -426,6 +430,35 @@ public class HotelDAOImpl implements HotelDAO {
                 transaction.commit();
                 session.close();
                 return result;
+        }
+
+        @Override
+        public ResultVO publishPlan(PlanVO vo) {
+                Session session = DBUtil.getSession();
+                
+                EmployeePO empl = (EmployeePO) session.createQuery(
+                                "from po.hotel.EmployeePO "
+                                + "where id = '" + vo.getEmpId() + "'"
+                ).list().get(0);
+                
+                List<?> roomList = session.createQuery(
+                                "from po.hotel.RoomPO "
+                                + "where pk.hotel = '" + empl.getHotel() + "' and "
+                                + "pk.room = '" + vo.getRoom() + "'"
+                ).list();
+                
+                if (roomList.isEmpty()) {
+                        return new ResultVO(false, "该房间不存在");
+                }
+                
+                Transaction transaction = session.beginTransaction();    
+                session.save(new PlanPO(
+                                new PlanPK(empl.getHotel(), vo.getRoom(), TimeUtil.getCurrentTime()),
+                                vo.getPrice(), vo.getEmpId(), PlanState.unread
+                ));
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "该计划已经发布，等待总经理的审批");
         }
 
 }
