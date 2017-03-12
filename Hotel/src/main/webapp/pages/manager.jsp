@@ -4,6 +4,7 @@
 <html>
 <head>
         <%@include file="/pages/common/meta.html" %>
+        <link rel="stylesheet" href="/Hotel/css/bootstrap-datepicker.min.css">
 <title>旅馆</title>
 </head>
 <body>
@@ -18,9 +19,9 @@
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="开店申请" onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');">
+                                        title="开店申请" onclick="insert('#form', '/Hotel/pages/hotel/new_branch.jsp');">
                                 <p><a class="text-center" 
-                                        onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');"
+                                        onclick="insert('#form', '/Hotel/pages/hotel/new_branch.jsp');"
                                 >开店申请</a></p>
                         </div>
                         <div class="col-md-2 text-center">
@@ -51,7 +52,9 @@
         
         <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
         <script src="/Hotel/js/bootstrap.min.js"></script>
+        <script src="/Hotel/js/bootstrap-datepicker.min.js"></script>
         <script src="/Hotel/js/util.js"></script>
         <script src="/Hotel/js/plan.js"></script>
+        <script src="/Hotel/js/branch.js"></script>
 </body>
 </html>

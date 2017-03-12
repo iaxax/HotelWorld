@@ -1,5 +1,5 @@
 package constant;
 
-public enum PlanState {
+public enum ApplyState {
         approval, disapproval, unread
 }

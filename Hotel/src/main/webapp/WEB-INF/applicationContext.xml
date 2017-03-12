@@ -49,4 +49,7 @@
         <bean id="PlanAction" class="controller.hotel.PlanAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
+        <bean id="BranchApplyAction" class="controller.hotel.BranchApplyAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
 </beans>

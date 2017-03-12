@@ -9,15 +9,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 
+import constant.ApplyState;
 import constant.BookingState;
 import constant.MemberRank;
-import constant.PlanState;
 import constant.ResideState;
 import constant.RoomState;
 import dao.intf.HotelDAO;
 import dao.intf.MemberDAO;
 import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
+import po.hotel.BranchApplyPO;
 import po.hotel.CancelBookRecordPO;
 import po.hotel.EmployeePO;
 import po.hotel.PlanPO;
@@ -26,6 +27,7 @@ import po.hotel.RoomPO;
 import po.member.MemberPO;
 import po.pk.AwayPK;
 import po.pk.BookingPK;
+import po.pk.BranchPK;
 import po.pk.CancelBookPK;
 import po.pk.PlanPK;
 import po.pk.ResidePK;
@@ -33,6 +35,7 @@ import util.DBUtil;
 import util.TimeUtil;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
+import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -454,11 +457,25 @@ public class HotelDAOImpl implements HotelDAO {
                 Transaction transaction = session.beginTransaction();    
                 session.save(new PlanPO(
                                 new PlanPK(empl.getHotel(), vo.getRoom(), TimeUtil.getCurrentTime()),
-                                vo.getPrice(), vo.getEmpId(), PlanState.unread
+                                vo.getPrice(), vo.getEmpId(), ApplyState.unread
                 ));
                 transaction.commit();
                 session.close();
                 return new ResultVO(true, "该计划已经发布，等待总经理的审批");
+        }
+
+        @Override
+        public ResultVO branchApply(BranchVO vo) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                session.save(new BranchApplyPO(
+                                new BranchPK(vo.getEmpId(), TimeUtil.getCurrentTime()),
+                                vo.getHotelName(), vo.getHotelAddr(),
+                                vo.getOpenDate(), ApplyState.unread
+                ));
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "开店申请已投递，等待总经理审批");
         }
 
 }

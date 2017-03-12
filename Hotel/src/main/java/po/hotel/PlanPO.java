@@ -5,7 +5,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import constant.PlanState;
+import constant.ApplyState;
 import po.pk.PlanPK;
 
 @Entity
@@ -22,13 +22,13 @@ public class PlanPO {
         private String suggestor;
         
         @Column(name="state")
-        private PlanState state;
+        private ApplyState state;
 
         public PlanPO() {
                 super();
         }
 
-        public PlanPO(PlanPK pk, int price, String suggestor, PlanState state) {
+        public PlanPO(PlanPK pk, int price, String suggestor, ApplyState state) {
                 super();
                 this.pk = pk;
                 this.price = price;
@@ -60,11 +60,11 @@ public class PlanPO {
                 this.suggestor = suggestor;
         }
 
-        public PlanState getState() {
+        public ApplyState getState() {
                 return state;
         }
 
-        public void setState(PlanState state) {
+        public void setState(ApplyState state) {
                 this.state = state;
         }
         

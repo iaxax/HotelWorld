@@ -5,6 +5,7 @@ import java.util.Map;
 
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
+import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -31,4 +32,6 @@ public interface Hotel {
         List<String> getResideRooms(String empId, String idNum);
         
         ResultVO publishPlan(PlanVO vo);
+        
+        ResultVO branchApply(BranchVO vo);
 }

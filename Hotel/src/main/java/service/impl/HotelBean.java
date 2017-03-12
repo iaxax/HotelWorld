@@ -7,6 +7,7 @@ import dao.intf.HotelDAO;
 import service.intf.Hotel;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
+import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -68,6 +69,11 @@ public class HotelBean implements Hotel {
         @Override
         public ResultVO publishPlan(PlanVO vo) {
                 return hotel.publishPlan(vo);
+        }
+
+        @Override
+        public ResultVO branchApply(BranchVO vo) {
+                return hotel.branchApply(vo);
         }
 
 }
