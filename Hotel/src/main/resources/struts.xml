@@ -183,5 +183,11 @@
                                 <param name="root">result</param>
                         </result>
                 </action>
+                <action name="checkPlanRequest" class="CEOMsgAction" method="checkPlanRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
         </package>
  </struts>

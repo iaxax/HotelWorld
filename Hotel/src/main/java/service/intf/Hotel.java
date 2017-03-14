@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import po.pk.BranchPK;
+import po.pk.PlanPK;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchRequestVO;
@@ -43,4 +44,6 @@ public interface Hotel {
         List<PlanRequestVO> getPlanRequest();
         
         ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
+        
+        ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
 }

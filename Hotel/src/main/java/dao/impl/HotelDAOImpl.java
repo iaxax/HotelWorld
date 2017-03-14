@@ -502,4 +502,33 @@ public class HotelDAOImpl implements HotelDAO {
                 return list;
         }
 
+        @Override
+        public ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                session.createQuery(
+                                "update po.hotel.BranchApplyPO "
+                                + "set state = '" + (isSuccess ? ApplyState.approval : ApplyState.disapproval) + "' "
+                                + "where pk.empId = '" + pk.getEmpId() + "' and pk.applyTime = '" + pk.getApplyTime() + "'"
+                ).executeUpdate();
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "您已完成该开店申请的审批");
+        }
+
+        @Override
+        public ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                session.createQuery(
+                                "update po.hotel.PlanPO "
+                                + "set state = '" + (isSuccess ? ApplyState.approval : ApplyState.disapproval) + "' "
+                                + "where pk.hotel = '" + pk.getHotel() + "' and pk.room = '" + pk.getRoom() + "' "
+                                + "and pk.proposalTime = '" + pk.getProposalTime() + "'"
+                ).executeUpdate();
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "您已完成该发布计划申请的审批");
+        }
+
 }

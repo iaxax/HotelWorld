@@ -5,6 +5,8 @@ import java.util.Map;
 
 import po.hotel.BranchApplyPO;
 import po.hotel.PlanPO;
+import po.pk.BranchPK;
+import po.pk.PlanPK;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchVO;
@@ -40,4 +42,8 @@ public interface HotelDAO {
         List<BranchApplyPO> getBranchRequest();
         
         List<PlanPO> getPlanRequest();
+        
+        ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
+        
+        ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
 }

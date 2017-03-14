@@ -1,22 +1,50 @@
+function getId(empId, datetime) {
+	var temp1 = datetime.split(' ');
+	var temp2 = temp1[1].split(':');
+	return empId + temp1[0] + temp2[0] + temp2[1] + temp2[2];
+}
+
 function checkBranchApply(isSuccess, empId, applyTime) {
 	$.ajax({
 		url: '/Hotel/checkBranchRequest.action',
 		method: 'post',
 		data: {
-			"isSuccess": isSuccess,
+			"success": isSuccess,
 			"empId": empId,
 			"applyTime": applyTime
 		},
 		success: function(result) {
-			showSuccess($('#tip'), result.msg);
+			var tip = $('#tip');
+			tip.css('color', 'blue');
+			tip.html(result.msg);
+			setTimeout(function() {
+				tip.html('');
+			}, 6000);
+			$('#' + getId(empId, applyTime)).hide();
 		}
 	});
 }
 
-function getId(empId, datetime) {
-	var temp1 = datetime.split(' ');
-	var temp2 = temp1[1].split(':');
-	return empId + temp1[0] + temp2[0] + temp2[1] + temp2[2];
+function checkPlanApply(isSuccess, hotel, room, applyTime, id) {
+	$.ajax({
+		url: '/Hotel/checkPlanRequest.action',
+		method: 'post',
+		data: {
+			"success": isSuccess,
+			"hotelName": hotel,
+			"roomNum": room,
+			"applyTime": applyTime
+		},
+		success: function(result) {
+			var tip = $('#tip');
+			tip.css('color', 'blue');
+			tip.html(result.msg);
+			setTimeout(function() {
+				tip.html('');
+			}, 6000);
+			$('#' + id).hide();
+		}
+	});
 }
 
 function getRequest() {
@@ -38,9 +66,9 @@ function getRequest() {
 	                + '<p>开店日期： ' + branch.openDate + '</p>'
 	                + '<br/>'
 	                + '<button class="btn btn-success btn-gap"'
-	                + 'onclick="checkBranchApply(true, \'' + branch.empId + '\', \'' + branch.requestDate + '\');$(\'#' + id + '\').hide()">通过</button>'
+	                + 'onclick="checkBranchApply(true, \'' + branch.empId + '\', \'' + branch.requestDate + '\');">通过</button>'
 	                + '<button class=" btn btn-warning btn-gap"'
-	                + 'onclick="window.location=\'/Hotel/pages/member.jsp\';">拒绝</button></div>';
+	                + 'onclick="checkBranchApply(false, \'' + branch.empId + '\', \'' + branch.requestDate + '\');">拒绝</button></div>';
 			}
 			
 			$.ajax({
@@ -49,17 +77,23 @@ function getRequest() {
 				success: function(result) {
 					for (var i = 0; i < result.length; ++i) {
 						var plan = result[i];
-						doc += '<div class="col-md-offset-1 col-md-4 card">'
+						var empId = plan.empId;
+						var date = plan.requestDate;
+						var id = getId(empId, date) ;
+						var hotel = plan.hotelName;
+						var room = plan.roomNum;
+						doc += '<div class="col-md-offset-1 col-md-4 card" id ="' + id + '">'
 			                + '<p>申请类型： 计划发布申请</p>'
-			                + '<p>员工工号： ' + plan.empId + '</p>'
-			                + '<p>申请时间： ' + plan.requestDate + '</p>'
-			                + '<p>旅店名称： ' + plan.hotelName + '</p>'
-			                + '<p>房间号码： ' + plan.roomNum + '</p>'
+			                + '<p>员工工号： ' + empId + '</p>'
+			                + '<p>申请时间： ' + date + '</p>'
+			                + '<p>旅店名称： ' +  hotel+ '</p>'
+			                + '<p>房间号码： ' +  room + '</p>'
 			                + '<p>房间价格： ' + plan.roomPrice + '</p>'
 			                + '<br/>'
-			                + '<button class="btn btn-success btn-gap">通过</button>'
+			                + '<button class="btn btn-success btn-gap"'
+			                + 'onclick="checkPlanApply(true, \'' + hotel + '\',\'' + room+'\',\''+ date + '\',\'' +  id + '\');">通过</button>'
 			                + '<button class=" btn btn-warning btn-gap"'
-			                + 'onclick="window.location=\'/Hotel/pages/member.jsp\';">拒绝</button></div>';
+			                + 'onclick="checkPlanApply(true, \'' + hotel + '\',\'' + room+'\',\''+ date + '\',\'' +  id + '\');">拒绝</button></div>';
 					}
 					
 					$('#ceoMsg').html(doc);

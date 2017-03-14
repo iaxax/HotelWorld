@@ -7,6 +7,8 @@ import java.util.Map;
 import dao.intf.HotelDAO;
 import po.hotel.BranchApplyPO;
 import po.hotel.PlanPO;
+import po.pk.BranchPK;
+import po.pk.PlanPK;
 import service.intf.Hotel;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
@@ -99,6 +101,16 @@ public class HotelBean implements Hotel {
                         result.add(po.toVO());
                 }
                 return result;
+        }
+
+        @Override
+        public ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk) {
+                return hotel.checkBranchRequest(isSuccess, pk);
+        }
+
+        @Override
+        public ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk) {
+                return hotel.checkPlanRequest(isSuccess, pk);
         }
 
 }

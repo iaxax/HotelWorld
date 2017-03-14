@@ -10,6 +10,7 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import po.pk.BranchPK;
+import po.pk.PlanPK;
 import service.intf.Hotel;
 import vo.hotel.BranchRequestVO;
 import vo.hotel.PlanRequestVO;
@@ -17,11 +18,15 @@ import vo.result.ResultVO;
 
 public class CEOMsgAction extends ActionSupport {
         
-        private boolean isSuccess;
+        private boolean success;
         
         private String empId;
         
         private String applyTime;
+        
+        private String hotelName;
+        
+        private String roomNum;
         
         private List<BranchRequestVO> branchList;
         
@@ -38,11 +43,18 @@ public class CEOMsgAction extends ActionSupport {
                         return "login";
                 }
                 
-                result = hotel.checkBranchRequest(isSuccess, new BranchPK(empId, applyTime));
+                result = hotel.checkBranchRequest(success, new BranchPK(empId, applyTime));
                 return SUCCESS;
         }
         
         public String checkPlanRequest() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                result = hotel.checkPlanRequest(success, new PlanPK(hotelName, roomNum, applyTime));
                 return SUCCESS;
         }
         
@@ -101,11 +113,11 @@ public class CEOMsgAction extends ActionSupport {
         }
 
         public boolean isSuccess() {
-                return isSuccess;
+                return success;
         }
 
-        public void setSuccess(boolean isSuccess) {
-                this.isSuccess = isSuccess;
+        public void setSuccess(boolean success) {
+                this.success = success;
         }
 
         public String getEmpId() {
@@ -130,6 +142,22 @@ public class CEOMsgAction extends ActionSupport {
 
         public void setResult(ResultVO result) {
                 this.result = result;
+        }
+
+        public String getHotelName() {
+                return hotelName;
+        }
+
+        public void setHotelName(String hotelName) {
+                this.hotelName = hotelName;
+        }
+
+        public String getRoomNum() {
+                return roomNum;
+        }
+
+        public void setRoomNum(String roomNum) {
+                this.roomNum = roomNum;
         }
         
 }
