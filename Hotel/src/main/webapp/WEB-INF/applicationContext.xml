@@ -52,4 +52,7 @@
         <bean id="BranchApplyAction" class="controller.hotel.BranchApplyAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
+        <bean id="CEOMsgAction" class="controller.hotel.CEOMsgAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
 </beans>

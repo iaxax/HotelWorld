@@ -165,5 +165,23 @@
                                 <param name="root">result</param>
                         </result>
                 </action>
+                <action name="getBranchRequest" class="CEOMsgAction" method="getBranchRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">branchList</param>
+                        </result>
+                </action>
+                <action name="getPlanRequest" class="CEOMsgAction" method="getPlanRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">planList</param>
+                        </result>
+                </action>
+                <action name="checkBranchRequest" class="CEOMsgAction" method="checkBranchRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
         </package>
  </struts>

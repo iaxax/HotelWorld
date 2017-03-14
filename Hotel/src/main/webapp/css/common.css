@@ -26,3 +26,14 @@ p > a {
 	width: 40%;
 	margin: auto 30%;
 }
+
+.card {
+	background-color: #eeeefe;
+	padding: 20px 81px;
+	text-align: left;
+	margin-top: 60px;
+}
+
+.btn-gap {
+	margin: 0 10px;
+}

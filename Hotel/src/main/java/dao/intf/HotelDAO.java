@@ -3,6 +3,8 @@ package dao.intf;
 import java.util.List;
 import java.util.Map;
 
+import po.hotel.BranchApplyPO;
+import po.hotel.PlanPO;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchVO;
@@ -34,4 +36,8 @@ public interface HotelDAO {
         ResultVO publishPlan(PlanVO vo);
         
         ResultVO branchApply(BranchVO vo);
+        
+        List<BranchApplyPO> getBranchRequest();
+        
+        List<PlanPO> getPlanRequest();
 }

@@ -478,4 +478,28 @@ public class HotelDAOImpl implements HotelDAO {
                 return new ResultVO(true, "开店申请已投递，等待总经理审批");
         }
 
+        @Override
+        public List<BranchApplyPO> getBranchRequest() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<BranchApplyPO> result = session.createQuery(
+                                "from po.hotel.BranchApplyPO "
+                                + "where state = '" + ApplyState.unread + "'"
+                ).list();
+                session.close();
+                return result;
+        }
+
+        @Override
+        public List<PlanPO> getPlanRequest() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<PlanPO> list = session.createQuery(
+                                "from po.hotel.PlanPO "
+                                + "where state = '" + ApplyState.unread + "'"
+                ).list();
+                session.close();
+                return list;
+        }
+
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import constant.ApplyState;
 import po.pk.BranchPK;
+import vo.hotel.BranchRequestVO;
 
 @Entity
 @Table(name="branch_apply")
@@ -41,6 +42,13 @@ public class BranchApplyPO {
                 this.hotelAddr = hotelAddr;
                 this.openDate = openDate;
                 this.state = state;
+        }
+        
+        public BranchRequestVO toVO() {
+                return new BranchRequestVO(
+                                pk.getEmpId(), hotelName,
+                                hotelAddr, openDate, pk.getApplyTime()
+                );
         }
 
         public BranchPK getPk() {

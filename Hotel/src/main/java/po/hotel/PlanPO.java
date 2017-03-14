@@ -3,10 +3,13 @@ package po.hotel;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import constant.ApplyState;
 import po.pk.PlanPK;
+import vo.hotel.PlanRequestVO;
 
 @Entity
 @Table(name="plan")
@@ -22,6 +25,7 @@ public class PlanPO {
         private String suggestor;
         
         @Column(name="state")
+        @Enumerated(EnumType.STRING)
         private ApplyState state;
 
         public PlanPO() {
@@ -35,7 +39,14 @@ public class PlanPO {
                 this.suggestor = suggestor;
                 this.state = state;
         }
-
+        
+        public PlanRequestVO toVO() {
+                return new PlanRequestVO(
+                                suggestor, pk.getHotel(), pk.getRoom(),
+                                price, pk.getProposalTime()
+                );
+        }
+        
         public PlanPK getPk() {
                 return pk;
         }

@@ -1,14 +1,19 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import dao.intf.HotelDAO;
+import po.hotel.BranchApplyPO;
+import po.hotel.PlanPO;
 import service.intf.Hotel;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
+import vo.hotel.BranchRequestVO;
 import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.PlanRequestVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
@@ -74,6 +79,26 @@ public class HotelBean implements Hotel {
         @Override
         public ResultVO branchApply(BranchVO vo) {
                 return hotel.branchApply(vo);
+        }
+
+        @Override
+        public List<BranchRequestVO> getBranchRequest() {
+                List<BranchApplyPO> poList = hotel.getBranchRequest();
+                List<BranchRequestVO> result = new ArrayList<>();
+                for (BranchApplyPO po : poList) {
+                        result.add(po.toVO());
+                }
+                return result;
+        }
+
+        @Override
+        public List<PlanRequestVO> getPlanRequest() {
+                List<PlanPO> poList = hotel.getPlanRequest();
+                List<PlanRequestVO> result = new ArrayList<>();
+                for (PlanPO po : poList) {
+                        result.add(po.toVO());
+                }
+                return result;
         }
 
 }

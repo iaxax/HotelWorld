@@ -1,6 +1,6 @@
 <%@page pageEncoding="utf-8" %>
 
-<div class="text-center" id="reside">
+<div class="text-center" id="plan">
         <h4 class="text-center input-gap">入住登记</h4>
         <h4 class="input-gap text-center" id="tip"></h4>
         <div  class="input-gap"></div>
@@ -16,6 +16,3 @@
                          onclick="window.location='/Hotel/pages/member.jsp';">取消</button>
         </div>
 </div>
-
-<script>
-</script>
