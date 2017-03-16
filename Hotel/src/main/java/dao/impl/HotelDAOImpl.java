@@ -16,12 +16,15 @@ import constant.ResideState;
 import constant.RoomState;
 import dao.intf.HotelDAO;
 import dao.intf.MemberDAO;
+import po.hotel.AwayPO;
 import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
 import po.hotel.BranchApplyPO;
 import po.hotel.CancelBookRecordPO;
 import po.hotel.EmployeePO;
-import po.hotel.PlanPO;
+import po.hotel.HotelInfoPO;
+import po.hotel.HotelModifyRecordPO;
+import po.hotel.PlanRecordPO;
 import po.hotel.ResideRecordPO;
 import po.hotel.RoomPO;
 import po.member.MemberPO;
@@ -29,14 +32,15 @@ import po.pk.AwayPK;
 import po.pk.BookingPK;
 import po.pk.BranchPK;
 import po.pk.CancelBookPK;
+import po.pk.InfoModifyPK;
 import po.pk.PlanPK;
 import po.pk.ResidePK;
 import util.DBUtil;
 import util.TimeUtil;
-import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.HotelModifyVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
@@ -93,7 +97,7 @@ public class HotelDAOImpl implements HotelDAO {
                         @SuppressWarnings("unchecked")
                         List<BookRecordPO> recQuery = session.createQuery(
                                        "from po.hotel.BookRecordPO "
-                                        + "where timestampdiff(day, pk.bookTime, now()) > days"
+                                        + "where timestampdiff(day, resideDate, now()) > 1"
                         ).list();
                         for (BookRecordPO po : recQuery) {
                                 session.createQuery(
@@ -102,11 +106,9 @@ public class HotelDAOImpl implements HotelDAO {
                                                 + "where pk.hotel = '" + po.getHotel() + "' and "
                                                 + "pk.room = '" + po.getRoom() + "'"
                                 ).executeUpdate();
+                                po.setState(BookingState.cancel);
+                                session.update(po);
                         }
-                        session.createQuery(
-                                        "update po.hotel.BookRecordPO set state='cancel' "
-                                         + "where timestampdiff(day, pk.bookTime, now()) > days"
-                         ).executeUpdate();
                         
                         session.createQuery(
                                         "update po.member.MemberPO "
@@ -123,7 +125,8 @@ public class HotelDAOImpl implements HotelDAO {
                         
                         session.save(new BookRecordPO(
                                         new BookingPK(vo.getMemberId(), TimeUtil.getCurrentTime()), 
-                                        vo.getHotel(), vo.getRoom(), vo.getDays(), BookingState.booking
+                                        vo.getHotel(), vo.getRoom(), vo.getDays(), 
+                                        BookingState.booking, vo.getResideDate()
                         ));
                         
                         transaction.commit();
@@ -231,6 +234,7 @@ public class HotelDAOImpl implements HotelDAO {
         @Override
         public ResultVO resideRegister(ResideVO vo) {
                 Session session = DBUtil.getSession();
+                
                 Transaction transaction = session.beginTransaction();
                 try {
                         @SuppressWarnings("unchecked")
@@ -239,22 +243,10 @@ public class HotelDAOImpl implements HotelDAO {
                                         + "where timestampdiff(day, pk.arriveTime, now()) > days"
                         ).list();
                         for (ResideRecordPO po : recList) {
-                                po.setState(ResideState.leave);
-                                session.update(po);
-                                session.createQuery(
-                                                "update po.hotel.RoomPO "
-                                                + "set state = 'free' "
-                                                + "where pk.hotel = '" + po.getHotel() + "' and "
-                                                + "pk.room = '" + po.getRoom() + "'"
-                                ).executeUpdate();
+                                awayRegister(new AwayPO(po.getHotel(), po.getRoom(), po.getPk().getIdNum()));
                         }         
                         
-                        EmployeePO empl = (EmployeePO) session.createQuery(
-                                        "from po.hotel.EmployeePO "
-                                        + "where id = '" + vo.getEmpId() + "'"
-                        ).list().get(0);
-                        String hotel = empl.getHotel();
-                        
+                        String hotel = getHotelName(vo.getEmpId());
                         RoomPO room = (RoomPO) session.createQuery(
                                         "from po.hotel.RoomPO "
                                         + "where pk.hotel = '" + hotel + "' and "
@@ -262,18 +254,37 @@ public class HotelDAOImpl implements HotelDAO {
                         ).list().get(0);
                         int price = room.getPrice() * vo.getDays();
                         
-                        System.out.println(vo.getMemberId());
+                        String now = TimeUtil.getCurrentTime();
                         if (vo.getMemberId() == null) {
                                 room.setState(RoomState.rented);
                                 session.update(room);
                                 
                                 session.save(new ResideRecordPO(
-                                                new ResidePK(vo.getRegistrant(), TimeUtil.getCurrentTime()),
+                                                new ResidePK(vo.getRegistrant(), now),
                                                 vo.getMemberId(), null, price, hotel, vo.getRoom(),
                                                 vo.getDays(), ResideState.reside
                                 ));
                         }
                         else {
+                                BookRecordPO rec = (BookRecordPO) session.createQuery(
+                                                "from po.hotel.BookRecordPO "
+                                                + "where pk.memberId = " + vo.getMemberId()+ " and "
+                                                + "state = '" + BookingState.booking + "' and "
+                                                + "hotel = '" + hotel + "' and "
+                                                + "room = '" + vo.getRoom() + "'"
+                                ).list().get(0);
+                                
+                                String resideDate = rec.getResideDate();
+                                if (TimeUtil.isBeforeToday(resideDate)) {
+                                        transaction.commit();
+                                        return new ResultVO(false, "当前还没到入住日期");
+                                }
+                                if (TimeUtil.isAfterToday(resideDate)) {
+                                        cancelRoom(new CancelRoomVO(vo.getMemberId(), hotel, vo.getRoom()));
+                                        transaction.commit();
+                                        return new ResultVO(false, "已经错过了入住日期");
+                                }
+                                
                                MemberPO member = (MemberPO) session.createQuery(
                                                "from po.member.MemberPO "
                                                + "where memberId = " + vo.getMemberId()
@@ -326,7 +337,7 @@ public class HotelDAOImpl implements HotelDAO {
                                ).executeUpdate();
                                
                                session.save(new ResideRecordPO(
-                                               new ResidePK(member.getIdNum(), TimeUtil.getCurrentTime()),
+                                               new ResidePK(member.getIdNum(), now),
                                                vo.getMemberId(), bookRec.getPk().getBookTime(),
                                                actualPrice, hotel, vo.getRoom(), vo.getDays(), ResideState.reside
                                ));
@@ -346,15 +357,9 @@ public class HotelDAOImpl implements HotelDAO {
         }
 
         @Override
-        public int getRoomPrice(String empId, String roomNum) {
+        public int getRoomPrice(String hotel, String roomNum) {
                 Session session = DBUtil.getSession();
                 
-                EmployeePO empl = (EmployeePO) session.createQuery(
-                                "from po.hotel.EmployeePO "
-                                + "where id = '" + empId + "'"
-                ).list().get(0);
-                
-                String hotel = empl.getHotel();
                 RoomPO room = (RoomPO) session.createQuery(
                                 "from po.hotel.RoomPO "
                                 + "where pk.hotel = '" + hotel + "' and "
@@ -366,35 +371,31 @@ public class HotelDAOImpl implements HotelDAO {
         }
 
         @Override
-        public ResultVO awayRegister(AwayVO vo) {
+        public ResultVO awayRegister(AwayPO po) {
                 Session session = DBUtil.getSession();
                Transaction transaction = session.beginTransaction();
                try {
-                       EmployeePO empl = (EmployeePO) session.createQuery(
-                                       "from po.hotel.EmployeePO where id = '" + vo.getEmpId() + "'"
-                       ).list().get(0);
-                       
                        RoomPO room =  (RoomPO) session.createQuery(
                                        "from po.hotel.RoomPO "
-                                       + "where pk.hotel = '" + empl.getHotel() + "' and "
-                                       + "pk.room = '" + vo.getRoom() + "'"
+                                       + "where pk.hotel = '" + po.getHotel() + "' and "
+                                       + "pk.room = '" + po.getRoom() + "'"
                        ).list().get(0);
                        room.setState(RoomState.free);
                        session.update(room);
                        
                        ResideRecordPO record = (ResideRecordPO) session.createQuery(
                                        "from po.hotel.ResideRecordPO "
-                                       + "where hotel = '" + empl.getHotel() + "' and "
-                                       + "room = '" + vo.getRoom() + "' and "
+                                       + "where hotel = '" + po.getHotel() + "' and "
+                                       + "room = '" + po.getRoom() + "' and "
                                        + "state = '" + ResideState.reside + "' and "
-                                       + "pk.idNum = '" + vo.getIdNum() + "'"
+                                       + "pk.idNum = '" + po.getIdNum() + "'"
                        ).list().get(0);
                        record.setState(ResideState.leave);
                        session.update(record);
                        
                        session.save(new AwayRecordPO(
-                                       new AwayPK(vo.getIdNum(), TimeUtil.getCurrentTime()),
-                                       empl.getHotel(), vo.getRoom(), record.getPk().getArriveTime()
+                                       new AwayPK(po.getIdNum(), TimeUtil.getCurrentTime()),
+                                       po.getHotel(), po.getRoom(), record.getPk().getArriveTime()
                        ));
                        
                        transaction.commit();
@@ -411,17 +412,13 @@ public class HotelDAOImpl implements HotelDAO {
         }
 
         @Override
-        public List<String> getResideRooms(String empId, String idNum) {
+        public List<String> getResideRooms(String hotel, String idNum) {
                 Session session = DBUtil.getSession();
                 Transaction transaction = session.beginTransaction();
-                EmployeePO empl = (EmployeePO) session.createQuery(
-                                "from po.hotel.EmployeePO where id = '" + empId + "'"
-                ).list().get(0);
-                
                 @SuppressWarnings("unchecked")
                 List<ResideRecordPO> recList = session.createQuery(
                                 "from po.hotel.ResideRecordPO "
-                                + "where hotel = '" + empl.getHotel() + "' and "
+                                + "where hotel = '" + hotel + "' and "
                                 + "state = '" + ResideState.reside + "' and "
                                 + "pk.idNum = '" + idNum + "'"
                 ).list();
@@ -439,14 +436,10 @@ public class HotelDAOImpl implements HotelDAO {
         public ResultVO publishPlan(PlanVO vo) {
                 Session session = DBUtil.getSession();
                 
-                EmployeePO empl = (EmployeePO) session.createQuery(
-                                "from po.hotel.EmployeePO "
-                                + "where id = '" + vo.getEmpId() + "'"
-                ).list().get(0);
-                
+                String hotel = getHotelName(vo.getEmpId());
                 List<?> roomList = session.createQuery(
                                 "from po.hotel.RoomPO "
-                                + "where pk.hotel = '" + empl.getHotel() + "' and "
+                                + "where pk.hotel = '" + hotel + "' and "
                                 + "pk.room = '" + vo.getRoom() + "'"
                 ).list();
                 
@@ -455,8 +448,8 @@ public class HotelDAOImpl implements HotelDAO {
                 }
                 
                 Transaction transaction = session.beginTransaction();    
-                session.save(new PlanPO(
-                                new PlanPK(empl.getHotel(), vo.getRoom(), TimeUtil.getCurrentTime()),
+                session.save(new PlanRecordPO(
+                                new PlanPK(hotel, vo.getRoom(), TimeUtil.getCurrentTime()),
                                 vo.getPrice(), vo.getEmpId(), ApplyState.unread
                 ));
                 transaction.commit();
@@ -491,10 +484,10 @@ public class HotelDAOImpl implements HotelDAO {
         }
 
         @Override
-        public List<PlanPO> getPlanRequest() {
+        public List<PlanRecordPO> getPlanRequest() {
                 Session session = DBUtil.getSession();
                 @SuppressWarnings("unchecked")
-                List<PlanPO> list = session.createQuery(
+                List<PlanRecordPO> list = session.createQuery(
                                 "from po.hotel.PlanPO "
                                 + "where state = '" + ApplyState.unread + "'"
                 ).list();
@@ -529,6 +522,149 @@ public class HotelDAOImpl implements HotelDAO {
                 transaction.commit();
                 session.close();
                 return new ResultVO(true, "您已完成该发布计划申请的审批");
+        }
+
+        @Override
+        public String getHotelName(String empId) {
+                Session session = DBUtil.getSession();
+                EmployeePO empl = (EmployeePO) session.createQuery(
+                                "from po.hotel.EmployeePO "
+                                + "where id = '" + empId + "'"
+                ).list().get(0);
+                session.close();
+                return empl.getHotel();
+        }
+
+        @Override
+        public HotelInfoPO getHotelBasicInfo(String empId) {
+                String name = getHotelName(empId);
+                Session session = DBUtil.getSession();
+                HotelInfoPO po = (HotelInfoPO) session.createQuery(
+                                "from po.hotel.HotelInfoPO where name = '" + name + "'"
+                ).list().get(0);
+                session.close();
+                return po;
+        }
+
+        @Override
+        public ResultVO modifyHotelInfo(HotelModifyVO vo) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                
+                String oldName = getHotelName(vo.getEmpId());
+                HotelInfoPO info = (HotelInfoPO) session.createQuery(
+                                "from po.hotel.HotelInfoPO where name = '" + oldName + "'"
+                ).list().get(0);
+                
+                String newName = vo.getName();
+                String newAddr = vo.getName();
+                newName = newName.equals("") ? info.getName() : newName;
+                newAddr = newAddr.equals("") ? info.getAddress() : newAddr;
+                
+                session.save(new HotelModifyRecordPO(
+                                new InfoModifyPK(vo.getEmpId(), TimeUtil.getCurrentTime()),
+                                newName, newAddr, ApplyState.unread
+                ));
+                
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "旅店信息修改请求已提交，请等待总经理的审批");
+        }
+
+        @Override
+        public Map<String, Integer> getResideRecords(String empId) {
+                Session session = DBUtil.getSession();
+                String hotel = getHotelName(empId);
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> resideList = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where hotel = '" + hotel + "' and "
+                                + "timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (ResideRecordPO po : resideList) {
+                        String year = TimeUtil.getYear(po.getPk().getArriveTime());
+                        if (result.containsKey(year)) {
+                                int num = result.get(year);
+                                result.put(year, num + 1);
+                        }
+                        else {
+                                result.put(year,  0);
+                        }
+                }
+                
+                session.close();
+                return result;
+        }
+
+        @Override
+        public Map<String, Integer> getBookRecords(String empId) {
+                Session session = DBUtil.getSession();
+                String hotel = getHotelName(empId);
+                @SuppressWarnings("unchecked")
+                List<BookRecordPO> list = session.createQuery(
+                                "from po.hotel.BookRecordPO "
+                                + "where hotel = '" + hotel + "' and "
+                                + "timestampdiff(year, pk.bookTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (BookRecordPO po : list) {
+                        String year = TimeUtil.getYear(po.getPk().getBookTime());
+                        if (result.containsKey(year)) {
+                                int num = result.get(year);
+                                result.put(year, num + 1);
+                        }
+                        else {
+                                result.put(year, 0);
+                        }
+                }
+                
+                session.close();
+                return result;
+        }
+
+        @Override
+        public Map<String, Integer> getFinanceStat(String empId) {
+                Session session = DBUtil.getSession();
+                String hotel = getHotelName(empId);
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> list = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where hotel = '" + hotel + "' and "
+                                + "timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (ResideRecordPO po : list) {
+                        String year = TimeUtil.getYear(po.getPk().getArriveTime());
+                        if (result.containsKey(year)) {
+                                int cost = result.get(year);
+                                result.put(year, cost + po.getCost());
+                        }
+                        else {
+                                result.put(year, po.getCost());
+                        }
+                }
+                
+                session.close();
+                return result;
         }
 
 }

@@ -51,9 +51,26 @@ function roomBookValidate() {
 		return;
 	}
 	
+	var date = $('#resideDate').val();
+	var datePattern = /\d{4}-\d{2}-\d{2}/;
+	if (datePattern.test(date) == false) {
+		showError(tip, '请输入有效日期');
+		return;
+	}
+	var today = new Date();
+	today.setHours(0, 0, 0, 0);
+	var temp = date.split('-');
+	var d = new Date(temp[0], temp[1] - 1, temp[2]);
+	d.setHours(0, 0, 0);
+	if (d < today) {
+		showError(tip, '入住日期不能小于今天');
+		return;
+	}
+	
 	var vo = {
 			"hotelName": $('#hotel').val(),
 			"room": $('#room').val(),
+			"resideDate": date,
 			"days": days
 	};
 	

@@ -1,8 +1,15 @@
 package dao.intf;
 
+import java.util.List;
+import java.util.Map;
+
+import po.hotel.BookRecordPO;
+import po.hotel.ResideRecordPO;
 import po.member.MemberPO;
 import vo.member.ActivateVO;
+import vo.member.CancelRecordVO;
 import vo.member.CancelVO;
+import vo.member.ModifyInfoVO;
 import vo.member.RechargeVO;
 import vo.result.ResultVO;
 
@@ -25,5 +32,23 @@ public interface MemberDAO {
         ResultVO cancelMember(CancelVO vo);
         
         ResultVO rechargeMember(RechargeVO vo);
+        
+        Map<String, Integer> getResideData(String memberId);
+        
+        Map<String, Integer> getCancelData(String memberId);
+        
+        Map<String, Integer> getBookData(String memberId);
+        
+        MemberPO getBasicInfo(String memberId);
+        
+        ResultVO modifyInfo(ModifyInfoVO vo);
+        
+        List<ResideRecordPO> getResideRecords(String memberId);
+        
+        List<BookRecordPO> getBookRecords(String memberId);
+       
+        List<CancelRecordVO> getCancelRecords(String memberId);
+        
+        Map<String, Integer> getCosumeStat(String memberId);
         
 }

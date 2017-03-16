@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import constant.BookingState;
 import po.pk.BookingPK;
+import vo.member.BookRecordVO;
 
 @Entity
 @Table(name="room_booking")
@@ -29,18 +30,36 @@ public class BookRecordPO {
         @Column(name="state")
         @Enumerated(EnumType.STRING)
         private BookingState state;
+        
+        @Column(name="reside_date")
+        private String resideDate;
 
         public BookRecordPO() {
                 super();
         }
 
-        public BookRecordPO(BookingPK pk, String hotel, String room, int days, BookingState state) {
+        public BookRecordPO(BookingPK pk, String hotel, String room, int days, BookingState state, String resideDate) {
                 super();
                 this.pk = pk;
                 this.hotel = hotel;
                 this.room = room;
                 this.days = days;
                 this.state = state;
+                this.resideDate = resideDate;
+        }
+        
+        public BookRecordVO toVO() {
+                String state = "";
+                switch(this.state) {
+                case booking:
+                        state = "预约中"; break;
+                case cancel:
+                        state = "已取消"; break;
+                case inside:
+                        state = "已入住"; break;
+                }
+                
+                return new BookRecordVO(hotel, room, pk.getBookTime(), resideDate, state, days);
         }
 
         public BookingPK getPk() {
@@ -81,6 +100,14 @@ public class BookRecordPO {
 
         public void setState(BookingState state) {
                 this.state = state;
+        }
+
+        public String getResideDate() {
+                return resideDate;
+        }
+
+        public void setResideDate(String resideDate) {
+                this.resideDate = resideDate;
         }
         
 }

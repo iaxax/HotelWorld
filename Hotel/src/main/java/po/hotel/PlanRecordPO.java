@@ -13,7 +13,7 @@ import vo.hotel.PlanRequestVO;
 
 @Entity
 @Table(name="plan")
-public class PlanPO {
+public class PlanRecordPO {
 
         @EmbeddedId
         private PlanPK pk;
@@ -28,11 +28,11 @@ public class PlanPO {
         @Enumerated(EnumType.STRING)
         private ApplyState state;
 
-        public PlanPO() {
+        public PlanRecordPO() {
                 super();
         }
 
-        public PlanPO(PlanPK pk, int price, String suggestor, ApplyState state) {
+        public PlanRecordPO(PlanPK pk, int price, String suggestor, ApplyState state) {
                 super();
                 this.pk = pk;
                 this.price = price;

@@ -36,8 +36,7 @@ public class LoginDAOImpl implements LoginDAO {
                 Query<MemberPO> validQuery = session.createQuery(
                                 "from po.member.MemberPO "
                                 + "where state != 'discard' and "
-                                + "((memberId=" + id + " and password='" + po.getPw() + "') or "
-                                + "(idNum='" + id + "' and password='" + po.getPw() + "'))"
+                                + "memberId=" + id + " and password='" + po.getPw() + "'"
                 );
                 List<MemberPO> list = validQuery.list();
                 if (list.isEmpty()) {
@@ -46,20 +45,19 @@ public class LoginDAOImpl implements LoginDAO {
                 }
                 
                 MemberPO member = list.get(0);
-                if (member.getState() == MemberState.pause) {
+                @SuppressWarnings("unchecked")
+                Query<ActivateRecordPO> actQuery = session.createQuery(
+                                "from po.member.ActivateRecordPO "
+                                + "where pk.memberId = " + member.getMemberId()
+                                + " order by pk.activateTime desc"
+                );
+                List<ActivateRecordPO> actList = actQuery.list();
+                MemberState state = member.getState();
+                if (state == MemberState.pause) {
                         Transaction transaction = session.beginTransaction();
                         
                         ResultVO result = null;
                         String time = null;
-                        
-                        @SuppressWarnings("unchecked")
-                        Query<ActivateRecordPO> actQuery = session.createQuery(
-                                        "from po.member.ActivateRecordPO "
-                                        + "where pk.memberId = " + member.getMemberId()
-                                        + " order by pk.activateTime desc"
-                        );
-                        List<ActivateRecordPO> actList = actQuery.list();
-                        
                         if (!actList.isEmpty()) {
                                 ActivateRecordPO record = actList.get(0);
                                 time = record.getPk().getActivateTime();
@@ -77,11 +75,8 @@ public class LoginDAOImpl implements LoginDAO {
                         
                         if (TimeUtil.isBeforeLastYear(time)
                                         && member.getBalance() < 1000) {
-                               session.createQuery(
-                                               "update po.member.MemberPO "
-                                               + "set state = 'discard' "
-                                               + "where memberId = " + member.getMemberId()
-                               ).executeUpdate();
+                               member.setState(MemberState.discard);
+                               session.update(member);
                                 result = new ResultVO(false, "该会员卡由于长期未激活而被废弃了");
                         }
                         else {
@@ -90,6 +85,18 @@ public class LoginDAOImpl implements LoginDAO {
                         transaction.commit();
                         session.close();
                         return result;
+                }
+                else if (state == MemberState.activate) {
+                        ActivateRecordPO record = actList.get(0);
+                        String time = record.getPk().getActivateTime();
+                        if (TimeUtil.isBeforeLastYear(time)) {
+                                Transaction transaction = session.beginTransaction();
+                                member.setState(MemberState.pause);
+                                session.update(member);
+                                transaction.commit();
+                                session.close();
+                                return new ResultVO(true, "登录成功，会员有效期已过，请激活会员卡");
+                        }
                 }
                 
                 session.close();

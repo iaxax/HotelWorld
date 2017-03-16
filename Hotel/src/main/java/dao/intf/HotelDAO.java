@@ -3,14 +3,16 @@ package dao.intf;
 import java.util.List;
 import java.util.Map;
 
+import po.hotel.AwayPO;
 import po.hotel.BranchApplyPO;
-import po.hotel.PlanPO;
+import po.hotel.HotelInfoPO;
+import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
 import po.pk.PlanPK;
-import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.HotelModifyVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
 import vo.result.ResultVO;
@@ -29,11 +31,11 @@ public interface HotelDAO {
         
         ResultVO resideRegister(ResideVO vo);
         
-        int getRoomPrice(String empId, String roomNum);
+        int getRoomPrice(String hotel, String roomNum);
         
-        ResultVO awayRegister(AwayVO vo);
+        ResultVO awayRegister(AwayPO po);
         
-        List<String> getResideRooms(String empId, String idNum);
+        List<String> getResideRooms(String hotel, String idNum);
         
         ResultVO publishPlan(PlanVO vo);
         
@@ -41,9 +43,22 @@ public interface HotelDAO {
         
         List<BranchApplyPO> getBranchRequest();
         
-        List<PlanPO> getPlanRequest();
+        List<PlanRecordPO> getPlanRequest();
         
         ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
         
         ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
+        
+        String getHotelName(String empId);
+        
+        HotelInfoPO getHotelBasicInfo(String empId);
+        
+        ResultVO modifyHotelInfo(HotelModifyVO vo);
+        
+        Map<String, Integer> getResideRecords(String empId);
+        
+        Map<String, Integer> getBookRecords(String empId);
+        
+        Map<String, Integer> getFinanceStat(String empId);
+        
 }

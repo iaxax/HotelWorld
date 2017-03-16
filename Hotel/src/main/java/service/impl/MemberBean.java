@@ -1,11 +1,23 @@
 package service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import dao.intf.MemberDAO;
+import po.hotel.BookRecordPO;
+import po.hotel.ResideRecordPO;
+import po.member.MemberPO;
 import service.intf.Member;
 import vo.member.ActivateVO;
+import vo.member.BookRecordVO;
+import vo.member.CancelRecordVO;
 import vo.member.CancelVO;
+import vo.member.MemberInfoVO;
+import vo.member.ModifyInfoVO;
 import vo.member.RechargeVO;
 import vo.member.RegisterVO;
+import vo.member.ResideRecordVO;
 import vo.result.ResultVO;
 
 public class MemberBean implements Member {
@@ -66,6 +78,56 @@ public class MemberBean implements Member {
                 }
                 
                 return this.member.rechargeMember(vo);
+        }
+
+        @Override
+        public List<Map<String, Integer>> getMemberData(String memberId) {
+                List<Map<String, Integer>> result = new ArrayList<Map<String,Integer>>();
+                result.add(member.getResideData(memberId));
+                result.add(member.getBookData(memberId));
+                result.add(member.getCancelData(memberId));
+                return result;
+        }
+
+        @Override
+        public MemberInfoVO getBasicInfo(String memberId) {
+                MemberPO po = member.getBasicInfo(memberId);
+                return po.toVO();
+        }
+
+        @Override
+        public ResultVO modifyInfo(ModifyInfoVO vo) {
+                return member.modifyInfo(vo);
+        }
+
+        @Override
+        public List<ResideRecordVO> getResideRecords(String memberId) {
+                List<ResideRecordPO> records = member.getResideRecords(memberId);
+                List<ResideRecordVO> result = new ArrayList<>();
+                for (ResideRecordPO po : records) {
+                        result.add(po.toVO());
+                }
+                return result;
+        }
+
+        @Override
+        public List<BookRecordVO> getBookRecords(String memberId) {
+                List<BookRecordPO> records = member.getBookRecords(memberId);
+                List<BookRecordVO> result = new ArrayList<>();
+                for (BookRecordPO po : records) {
+                        result.add(po.toVO());
+                }
+                return result;
+        }
+
+        @Override
+        public List<CancelRecordVO> getCancelRecords(String memberId) {
+                return member.getCancelRecords(memberId);
+        }
+
+        @Override
+        public Map<String, Integer> getCosumeStat(String memberId) {
+                return member.getCosumeStat(memberId);
         }
 
 }

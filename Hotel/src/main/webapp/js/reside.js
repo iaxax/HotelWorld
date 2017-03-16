@@ -135,7 +135,7 @@ function submitReside(vo) {
 function submitMemberReside() {
 	var temp = $('#room').val().split('-');
 	var vo = {
-			"memberId": $('memId').val(),
+			"memberId": $('#memId').val(),
 			"roomNum": temp[1],
 	};
 

@@ -26,9 +26,9 @@
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="旅店信息" onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');">
+                                        title="旅店信息" onclick="insert('#form', '/Hotel/pages/hotel/hotel_info.jsp');">
                                 <p><a class="text-center" 
-                                        onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');"
+                                        onclick="insert('#form', '/Hotel/pages/hotel/hotel_info.jsp');"
                                 >旅店信息</a></p>
                         </div>
                         <div class="col-md-2 text-center">
@@ -53,8 +53,10 @@
         <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
         <script src="/Hotel/js/bootstrap.min.js"></script>
         <script src="/Hotel/js/bootstrap-datepicker.min.js"></script>
+        <script src="/Hotel/js/echarts.min.js"></script>
         <script src="/Hotel/js/util.js"></script>
         <script src="/Hotel/js/plan.js"></script>
         <script src="/Hotel/js/branch.js"></script>
+        <script src="/Hotel/js/hotel_info.js"></script>
 </body>
 </html>

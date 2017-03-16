@@ -22,6 +22,8 @@ public class RoomBookAction extends ActionSupport {
         
         private String room;
         
+        private String resideDate;
+        
         private int days;
         
         private Map<String, List<String>> roomInfo;
@@ -40,7 +42,7 @@ public class RoomBookAction extends ActionSupport {
                 }
                 
                 result = hotel.bookRoom(new BookRoomVO(
-                                (String)session.getAttribute("id"), hotelName, room, days
+                                (String)session.getAttribute("id"), hotelName, room, days, resideDate
                 ));
                 return SUCCESS;
         }
@@ -121,6 +123,14 @@ public class RoomBookAction extends ActionSupport {
 
         public void setRoomList(List<String> roomList) {
                 this.roomList = roomList;
+        }
+
+        public String getResideDate() {
+                return resideDate;
+        }
+
+        public void setResideDate(String resideDate) {
+                this.resideDate = resideDate;
         }
         
 }

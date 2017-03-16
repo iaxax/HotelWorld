@@ -78,6 +78,48 @@
                                 <param name="root">result</param>
                         </result>
                 </action>
+                <action name="getMemberData" class="MemberDataAction" method="getMemberData">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">data</param>
+                        </result>
+                </action>
+                <action name="getBasicInfo" class="MemberDataAction" method="getBasicInfo">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">memberInfo</param>
+                        </result>
+                </action>
+                <action name="modifyInfo" class="MemberDataAction" method="modifyInfo">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getMemberResideRecord" class="MemberDataAction" method="getMemberResideRecord">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">resideRecords</param>
+                        </result>
+                </action>
+                <action name="getMemberBookRecord" class="MemberDataAction" method="getMemberBookRecord">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">bookRecords</param>
+                        </result>
+                </action>
+                <action name="getBookCancelRecord" class="MemberDataAction" method="getBookCancelRecord">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">cancelRecords</param>
+                        </result>
+                </action>
+                <action name="getMemberFinanceStat" class="MemberDataAction" method="getMemberFinanceStat">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">consumeData</param>
+                        </result>
+                </action>
         </package>
         
         <package name="hotel" extends="struts-default,json-default">
@@ -187,6 +229,24 @@
                         <result name="login">/index.jsp</result>
                         <result type="json">
                                 <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getHotelBasicInfo" class="HotelDataAction" method="getHotelBasicInfo">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">hotelInfo</param>
+                        </result>
+                </action>
+                <action name="modifyHotelInfo" class="HotelDataAction" method="modifyHotelInfo">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="getHotelStat" class="HotelDataAction" method="getHotelStat">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">statInfo</param>
                         </result>
                 </action>
         </package>

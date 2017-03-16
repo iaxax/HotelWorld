@@ -34,6 +34,9 @@
         <bean id="RechargeAction" class="controller.member.RechargeAction">
                 <property name="member" ref="memberBean" />
         </bean>
+        <bean id="MemberDataAction" class="controller.member.MemberDataAction">
+                <property name="member" ref="memberBean" />
+        </bean>
         <bean id="RoomBookAction" class="controller.hotel.RoomBookAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
@@ -53,6 +56,9 @@
                 <property name="hotel" ref="hotelBean" />
         </bean>
         <bean id="CEOMsgAction" class="controller.hotel.CEOMsgAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
+        <bean id="HotelDataAction" class="controller.hotel.HotelDataAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
 </beans>

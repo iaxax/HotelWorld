@@ -1,6 +1,9 @@
 package dao.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,6 +12,9 @@ import org.hibernate.query.Query;
 import constant.MemberState;
 import dao.intf.MemberDAO;
 import po.CreditCardPO;
+import po.hotel.BookRecordPO;
+import po.hotel.CancelBookRecordPO;
+import po.hotel.ResideRecordPO;
 import po.member.ActivateRecordPO;
 import po.member.CancelRecordPO;
 import po.member.MemberPO;
@@ -19,7 +25,9 @@ import po.pk.RegisterPK;
 import util.DBUtil;
 import util.TimeUtil;
 import vo.member.ActivateVO;
+import vo.member.CancelRecordVO;
 import vo.member.CancelVO;
+import vo.member.ModifyInfoVO;
 import vo.member.RechargeVO;
 import vo.result.ResultVO;
 
@@ -78,6 +86,14 @@ public class MemberDAOImpl implements MemberDAO {
         @Override
         public ResultVO activateMember(ActivateVO vo) {
                 Session session = DBUtil.getSession();
+                MemberPO member = (MemberPO) session.createQuery(
+                                "from po.member.MemberPO where memberId = " + vo.getMemberId()
+                ).list().get(0);
+                if (member.getState() == MemberState.activate) {
+                        session.close();
+                        return new ResultVO(false, "您已经激活了会员卡");
+                }
+                
                 Transaction transaction = session.beginTransaction();
                 try {
                         int b = getAccountBalance(vo.getAccountId());
@@ -241,5 +257,207 @@ public class MemberDAOImpl implements MemberDAO {
                 finally {
                         session.close();
                 }
+        }
+
+        @Override
+        public Map<String, Integer> getResideData(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> records = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where memberId = " + memberId + " and "
+                                + "timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                for (ResideRecordPO po : records) {
+                        String time = po.getPk().getArriveTime();
+                        String year = TimeUtil.getYear(time);
+                        if (result.containsKey(year)) {
+                                int y = result.get(year);
+                                result.put(year, y + 1);
+                        }
+                        else {
+                                result.put(year, 0);
+                        }
+                }
+                session.close();
+                return result;
+        }
+
+        @Override
+        public Map<String, Integer> getCancelData(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<CancelBookRecordPO> records = session.createQuery(
+                                "from po.hotel.CancelBookRecordPO "
+                                + "where pk.memberId = " + memberId + " and "
+                                + "timestampdiff(year, pk.cancelTime, now()) < 3"
+                ).list();
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                for (CancelBookRecordPO po : records) {
+                        String time = po.getPk().getCancelTime();
+                        String year = TimeUtil.getYear(time);
+                        if (result.containsKey(year)) {
+                                int y = result.get(year);
+                                result.put(year, y + 1);
+                        }
+                        else {
+                                result.put(year, 0);
+                        }
+                }
+                session.close();
+                return result;
+        }
+
+        @Override
+        public Map<String, Integer> getBookData(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<BookRecordPO> records = session.createQuery(
+                                "from po.hotel.BookRecordPO "
+                                + "where pk.memberId = " + memberId + " and "
+                                + "timestampdiff(year, pk.bookTime, now()) < 3"
+                ).list();
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                for (BookRecordPO po : records) {
+                        String time = po.getPk().getBookTime();
+                        String year = TimeUtil.getYear(time);
+                        if (result.containsKey(year)) {
+                                int y = result.get(year);
+                                result.put(year, y + 1);
+                        }
+                        else {
+                                result.put(year, 0);
+                        }
+                }
+                session.close();
+                return result;
+        }
+
+        @Override
+        public MemberPO getBasicInfo(String memberId) {
+                Session session = DBUtil.getSession();
+                MemberPO member = (MemberPO) session.createQuery(
+                                "from po.member.MemberPO "
+                                + "where memberId = " + memberId
+                ).list().get(0);
+                session.close();
+                return member;
+        }
+
+        @Override
+        public ResultVO modifyInfo(ModifyInfoVO vo) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                MemberPO member = (MemberPO) session.createQuery(
+                                "from po.member.MemberPO "
+                                + "where memberId = " + vo.getMemberId()
+                ).list().get(0);
+                String name = vo.getName();
+                String phone = vo.getPhone();
+                if (name.equals("") && phone.equals("")) {
+                        return new ResultVO(true, "会员信息没有改动");
+                }
+                
+                name = name.equals("") ? member.getName() : name;
+                phone = phone.equals("") ? member.getPhone() : phone;
+                member.setName(name);
+                member.setPhone(phone);
+                session.update(member);
+                
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "会员信息修改成功");
+        }
+
+        @Override
+        public List<ResideRecordPO> getResideRecords(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> result = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where memberId = " + memberId
+                                + "order by pk.arriveTime desc"
+                ).list();
+                session.close();
+                return result;
+        }
+
+        @Override
+        public List<BookRecordPO> getBookRecords(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<BookRecordPO> result = session.createQuery(
+                                "from po.hotel.BookRecordPO "
+                                + "where pk.memberId = " + memberId
+                                + "order by pk.bookTime desc"
+                ).list();
+                return result;
+        }
+
+        @Override
+        public List<CancelRecordVO> getCancelRecords(String memberId) {
+                Session session = DBUtil.getSession();
+                List<CancelRecordVO> result = new ArrayList<>();
+                @SuppressWarnings("unchecked")
+                List<CancelBookRecordPO> records = session.createQuery(
+                                "from po.hotel.CancelBookRecordPO "
+                                + "where pk.memberId = " + memberId
+                                + "order by pk.cancelTime desc"
+                ).list();
+                for (CancelBookRecordPO po : records) {
+                        BookRecordPO b = (BookRecordPO) session.createQuery(
+                                        "from po.hotel.BookRecordPO "
+                                        + "where pk.memberId = " + memberId
+                                        + " and pk.bookTime = '" + po.getBookTime() + "'"
+                        ).list().get(0);
+                        result.add(new CancelRecordVO(
+                                        b.getHotel(), b.getRoom(), po.getBookTime(),
+                                        po.getPk().getCancelTime()
+                        ));
+                }
+                return result;
+        }
+
+        @Override
+        public Map<String, Integer> getCosumeStat(String memberId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> list = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (ResideRecordPO po : list) {
+                        String year = TimeUtil.getYear(po.getPk().getArriveTime());
+                        if (result.containsKey(year)) {
+                                int cost = result.get(year);
+                                result.put(year, cost + po.getCost());
+                        }
+                        else {
+                                result.put(year, po.getCost());
+                        }
+                }
+                
+                session.close();
+                return result;
         }
 }

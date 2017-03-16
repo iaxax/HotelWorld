@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import dao.intf.HotelDAO;
+import po.hotel.AwayPO;
 import po.hotel.BranchApplyPO;
-import po.hotel.PlanPO;
+import po.hotel.HotelInfoPO;
+import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
 import po.pk.PlanPK;
 import service.intf.Hotel;
@@ -15,6 +17,8 @@ import vo.hotel.BookRoomVO;
 import vo.hotel.BranchRequestVO;
 import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.HotelInfoVO;
+import vo.hotel.HotelModifyVO;
 import vo.hotel.PlanRequestVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -60,17 +64,20 @@ public class HotelBean implements Hotel {
 
         @Override
         public int getRoomPrice(String empId, String roomNum) {
-                return hotel.getRoomPrice(empId, roomNum);
+                String hotelName = hotel.getHotelName(empId);
+                return hotel.getRoomPrice(hotelName, roomNum);
         }
 
         @Override
         public ResultVO awayRegister(AwayVO vo) {
-                return hotel.awayRegister(vo);
+                String hotelName = hotel.getHotelName(vo.getEmpId());
+                return hotel.awayRegister(new AwayPO(hotelName, vo.getRoom(), vo.getIdNum()));
         }
 
         @Override
         public List<String> getResideRooms(String empId, String idNum) {
-                return hotel.getResideRooms(empId, idNum);
+                String hotelName = hotel.getHotelName(empId);
+                return hotel.getResideRooms(hotelName, idNum);
         }
 
         @Override
@@ -95,9 +102,9 @@ public class HotelBean implements Hotel {
 
         @Override
         public List<PlanRequestVO> getPlanRequest() {
-                List<PlanPO> poList = hotel.getPlanRequest();
+                List<PlanRecordPO> poList = hotel.getPlanRequest();
                 List<PlanRequestVO> result = new ArrayList<>();
-                for (PlanPO po : poList) {
+                for (PlanRecordPO po : poList) {
                         result.add(po.toVO());
                 }
                 return result;
@@ -111,6 +118,32 @@ public class HotelBean implements Hotel {
         @Override
         public ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk) {
                 return hotel.checkPlanRequest(isSuccess, pk);
+        }
+
+        @Override
+        public HotelInfoVO getHotelBasicInfo(String empId) {
+                HotelInfoPO po = hotel.getHotelBasicInfo(empId);
+                return po.toVO();
+        }
+
+        @Override
+        public ResultVO modifyHotelInfo(HotelModifyVO vo) {
+                String name = vo.getName();
+                String address = vo.getAddress();
+                if (name.equals("") && address.equals("")) {
+                        return new ResultVO(true, "旅店信息没有发生改变");
+                }
+                
+                return hotel.modifyHotelInfo(vo);
+        }
+
+        @Override
+        public List<Map<String, Integer>> getHotelStat(String empId) {
+                List<Map<String, Integer>> result = new ArrayList<>();
+                result.add(hotel.getResideRecords(empId));
+                result.add(hotel.getBookRecords(empId));
+                result.add(hotel.getFinanceStat(empId));
+                return result;
         }
 
 }

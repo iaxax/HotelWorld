@@ -37,3 +37,23 @@ p > a {
 .btn-gap {
 	margin: 0 10px;
 }
+
+.info-card {
+        background-color: #eeeefe;
+        padding: 20px 60px;
+        text-align: left;
+        margin-top: 40px;
+}
+
+.record-card {
+	background-color: #eeeefe;
+        padding: 20px 60px;
+        text-align: left;
+        margin-top: 40px;
+        margin-left: 80px;
+}
+
+.chart {
+	height: 500px;
+	margin-left: 30px;
+}

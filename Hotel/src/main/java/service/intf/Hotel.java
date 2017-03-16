@@ -10,6 +10,8 @@ import vo.hotel.BookRoomVO;
 import vo.hotel.BranchRequestVO;
 import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
+import vo.hotel.HotelInfoVO;
+import vo.hotel.HotelModifyVO;
 import vo.hotel.PlanRequestVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -46,4 +48,10 @@ public interface Hotel {
         ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
         
         ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
+        
+        HotelInfoVO getHotelBasicInfo(String empId);
+        
+        ResultVO modifyHotelInfo(HotelModifyVO vo);
+        
+        List<Map<String, Integer>> getHotelStat(String empId);
 }

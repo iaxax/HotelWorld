@@ -1,0 +1,74 @@
+package po.hotel;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+
+import constant.ApplyState;
+import po.pk.InfoModifyPK;
+
+@Entity
+@Table(name="info_modify_apply")
+public class HotelModifyRecordPO {
+        
+        @EmbeddedId
+        private InfoModifyPK pk;
+
+        @Column(name="hotel_name")
+        private String name;
+        
+        @Column(name="hotel_addr")
+        private String address;
+        
+        @Column(name="state")
+        @Enumerated(EnumType.STRING)
+        private ApplyState state;
+
+        public HotelModifyRecordPO() {
+                super();
+        }
+
+        public HotelModifyRecordPO(InfoModifyPK pk, String name, String address, ApplyState state) {
+                super();
+                this.pk = pk;
+                this.name = name;
+                this.address = address;
+                this.state = state;
+        }
+
+        public InfoModifyPK getPk() {
+                return pk;
+        }
+
+        public void setPk(InfoModifyPK pk) {
+                this.pk = pk;
+        }
+
+        public String getName() {
+                return name;
+        }
+
+        public void setName(String name) {
+                this.name = name;
+        }
+
+        public String getAddress() {
+                return address;
+        }
+
+        public void setAddress(String address) {
+                this.address = address;
+        }
+
+        public ApplyState getState() {
+                return state;
+        }
+
+        public void setState(ApplyState state) {
+                this.state = state;
+        }
+        
+}

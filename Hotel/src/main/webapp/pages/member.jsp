@@ -5,6 +5,7 @@
 <html>
 <head>
 <%@include file="/pages/common/meta.html" %>
+<link rel="stylesheet" href="/Hotel/css/bootstrap-datepicker.min.css">
 <title>会员</title>
 <style>
         p>a {
@@ -69,11 +70,14 @@
         <script src="/Hotel/js/jquery-3.1.1.min.js"></script>
 	<script src="/Hotel/js/bootstrap.min.js"></script>
 	<script src="/Hotel/js/util.js"></script>
+	<script src="/Hotel/js/bootstrap-datepicker.min.js"></script>
+	<script src="/Hotel/js/echarts.min.js"></script>
         <script src="/Hotel/js/register.js"></script>
         <script src="/Hotel/js/activate.js"></script>
         <script src="/Hotel/js/cancel.js"></script>
         <script src="/Hotel/js/recharge.js"></script>
         <script src="/Hotel/js/room_book.js"></script>
         <script src="/Hotel/js/room_cancel.js"></script>
+        <script src="/Hotel/js/mem_info.js"></script>
 </body>
 </html>

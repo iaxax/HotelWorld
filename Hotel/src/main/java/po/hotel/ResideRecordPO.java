@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import constant.ResideState;
 import po.pk.ResidePK;
+import vo.member.ResideRecordVO;
 
 @Entity
 @Table(name="arrive")
@@ -54,6 +55,13 @@ public class ResideRecordPO {
                 this.room = room;
                 this.days = days;
                 this.state = state;
+        }
+        
+        public ResideRecordVO toVO() {
+                return new ResideRecordVO(
+                                hotel, room, bookTime,
+                                pk.getArriveTime(), days, cost
+                );
         }
 
         public ResidePK getPk() {

@@ -6,6 +6,7 @@
         <div class="input">
                 <select class="form-control input-gap" id="hotel" onchange="showRooms($('#room'), $('#hotel').val());"></select>
                 <select class="form-control input-gap" id="room"></select>
+                <input type="text" class="form-control input-gap"  placeholder="入住时间" id="resideDate">
                 <input type="text" class="form-control input-gap"  placeholder="预订天数" id="days">
                 <button class="form-control input-gap btn btn-success"
                          onclick="roomBookValidate();" id='book'>预订</button>
@@ -16,4 +17,5 @@
 
 <script>
 getInfo();
+$('#resideDate').datepicker({format: "yyyy-mm-dd"});
 </script>

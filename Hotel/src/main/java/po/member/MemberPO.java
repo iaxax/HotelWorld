@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import constant.MemberRank;
 import constant.MemberState;
+import vo.member.MemberInfoVO;
 
 @Entity
 @Table(name="member")
@@ -67,6 +68,34 @@ public class MemberPO {
                 this.consumption = consumption;
                 this.points = points;
                 this.state = state;
+        }
+        
+        public MemberInfoVO toVO() {
+                String rank = "";
+                switch(this.rank) {
+                case high:
+                        rank = "高级"; break;
+                case mid:
+                        rank = "中级"; break;
+                case low:
+                        rank = "低级"; break;
+                }
+                
+                String state = "";
+                switch(this.state) {
+                case activate:
+                        state = "激活"; break;
+                case discard:
+                        state = "停止"; break;
+                case pause:
+                        state = "暂停";  break;
+                }
+                
+                return new MemberInfoVO(
+                                memberId, name, idNum,
+                                phone, balance, points,
+                                consumption, rank, state
+                );
         }
 
         public Integer getMemberId() {
