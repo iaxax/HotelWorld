@@ -45,9 +45,20 @@ public class BranchApplyPO {
         }
         
         public BranchRequestVO toVO() {
+                String state = "";
+                switch(this.state) {
+                case approval:
+                        state = "通过"; break;
+                case disapproval:
+                        state = "拒绝"; break;
+                case unread:
+                        state = "未读"; break;
+                }
+                
                 return new BranchRequestVO(
                                 pk.getEmpId(), hotelName,
-                                hotelAddr, openDate, pk.getApplyTime()
+                                hotelAddr, openDate,
+                                pk.getApplyTime(), state
                 );
         }
 

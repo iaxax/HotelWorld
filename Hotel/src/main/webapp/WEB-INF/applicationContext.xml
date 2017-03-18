@@ -61,4 +61,7 @@
         <bean id="HotelDataAction" class="controller.hotel.HotelDataAction">
                 <property name="hotel" ref="hotelBean" />
         </bean>
+        <bean id="HotelInformAction" class="controller.hotel.HotelInformAction">
+                <property name="hotel" ref="hotelBean" />
+        </bean>
 </beans>

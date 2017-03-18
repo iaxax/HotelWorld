@@ -8,6 +8,7 @@ import dao.intf.HotelDAO;
 import po.hotel.AwayPO;
 import po.hotel.BranchApplyPO;
 import po.hotel.HotelInfoPO;
+import po.hotel.HotelModifyRecordPO;
 import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
 import po.pk.PlanPK;
@@ -19,6 +20,7 @@ import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.HotelInfoVO;
 import vo.hotel.HotelModifyVO;
+import vo.hotel.InfoRequestVO;
 import vo.hotel.PlanRequestVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -143,6 +145,42 @@ public class HotelBean implements Hotel {
                 result.add(hotel.getResideRecords(empId));
                 result.add(hotel.getBookRecords(empId));
                 result.add(hotel.getFinanceStat(empId));
+                return result;
+        }
+
+        @Override
+        public List<InfoRequestVO> getInfoRequest() {
+                // TODO Auto-generated method stub
+                return null;
+        }
+
+        @Override
+        public List<BranchRequestVO> getAllBranchRequest(String empId) {
+                List<BranchApplyPO> list = hotel.getAllBranchRequest(empId);
+                List<BranchRequestVO> result = new ArrayList<>();
+                for (BranchApplyPO po : list) {
+                        result.add(po.toVO());
+                }
+                return result;
+        }
+
+        @Override
+        public List<PlanRequestVO> getAllPlanRequest(String empId) {
+                List<PlanRecordPO> list = hotel.getAllPlanRequest(empId);
+                List<PlanRequestVO> result = new ArrayList<>();
+                for (PlanRecordPO po : list) {
+                        result.add(po.toVO());
+                }
+                return result;
+        }
+
+        @Override
+        public List<InfoRequestVO> getAllInfoRequest(String empId) {
+                List<HotelModifyRecordPO> list = hotel.getAllInfoRequest(empId);
+                List<InfoRequestVO> result = new ArrayList<>();
+                for (HotelModifyRecordPO po : list) {
+                        result.add(po.toVO());
+                }
                 return result;
         }
 

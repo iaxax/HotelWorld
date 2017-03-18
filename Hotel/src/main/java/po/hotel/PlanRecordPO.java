@@ -41,9 +41,19 @@ public class PlanRecordPO {
         }
         
         public PlanRequestVO toVO() {
+                String state = "";
+                switch (this.state) {
+                case approval:
+                        state = "通过"; break;
+                case disapproval:
+                        state = "拒绝"; break;
+                case unread:
+                        state = "未读"; break;
+                }
+                
                 return new PlanRequestVO(
                                 suggestor, pk.getHotel(), pk.getRoom(),
-                                price, pk.getProposalTime()
+                                price, pk.getProposalTime(), state
                 );
         }
         

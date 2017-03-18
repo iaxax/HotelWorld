@@ -6,6 +6,7 @@ import java.util.Map;
 import po.hotel.AwayPO;
 import po.hotel.BranchApplyPO;
 import po.hotel.HotelInfoPO;
+import po.hotel.HotelModifyRecordPO;
 import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
 import po.pk.PlanPK;
@@ -61,4 +62,9 @@ public interface HotelDAO {
         
         Map<String, Integer> getFinanceStat(String empId);
         
+        List<BranchApplyPO> getAllBranchRequest(String empId);
+        
+        List<PlanRecordPO> getAllPlanRequest(String empId);
+        
+        List<HotelModifyRecordPO> getAllInfoRequest(String empId);
 }

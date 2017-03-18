@@ -249,5 +249,23 @@
                                 <param name="root">statInfo</param>
                         </result>
                 </action>
+                <action name="getBranchInform" class="HotelInformAction" method="getBranchInform">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">branchList</param>
+                        </result>
+                </action>
+                <action name="getInfoInform" class="HotelInformAction" method="getInfoInform">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">infoList</param>
+                        </result>
+                </action>
+                <action name="getPlanInform" class="HotelInformAction" method="getPlanInform">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">planList</param>
+                        </result>
+                </action>
         </package>
  </struts>

@@ -488,7 +488,7 @@ public class HotelDAOImpl implements HotelDAO {
                 Session session = DBUtil.getSession();
                 @SuppressWarnings("unchecked")
                 List<PlanRecordPO> list = session.createQuery(
-                                "from po.hotel.PlanPO "
+                                "from po.hotel.PlanRecordPO "
                                 + "where state = '" + ApplyState.unread + "'"
                 ).list();
                 session.close();
@@ -663,6 +663,45 @@ public class HotelDAOImpl implements HotelDAO {
                         }
                 }
                 
+                session.close();
+                return result;
+        }
+
+        @Override
+        public List<BranchApplyPO> getAllBranchRequest(String empId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<BranchApplyPO> result = session.createQuery(
+                                "from po.hotel.BranchApplyPO "
+                                + "where pk.empId = '" + empId + "' "
+                                + "order by pk.applyTime desc"
+                ).list();
+                session.close();
+                return result;
+        }
+
+        @Override
+        public List<PlanRecordPO> getAllPlanRequest(String empId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<PlanRecordPO> result = session.createQuery(
+                                "from po.hotel.PlanRecordPO "
+                                + "where suggestor = '" + empId + "' "
+                                + "order by pk.proposalTime desc"
+                ).list();
+                session.close();
+                return result;
+        }
+
+        @Override
+        public List<HotelModifyRecordPO> getAllInfoRequest(String empId) {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<HotelModifyRecordPO> result = session.createQuery(
+                                "from po.hotel.HotelModifyRecordPO "
+                                + "where pk.empId = '" + empId + "' "
+                                + "order by pk.applyTime desc"
+                ).list();
                 session.close();
                 return result;
         }

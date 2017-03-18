@@ -33,9 +33,9 @@
                         </div>
                         <div class="col-md-2 text-center">
                                 <img alt="图标" src="/Hotel/img/home-icon.png" class="btn-icon"
-                                        title="通知" onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');">
+                                        title="通知" onclick="insert('#form', '/Hotel/pages/hotel/hotel_msg.jsp');">
                                 <p><a class="text-center" 
-                                        onclick="insert('#form', '/Hotel/pages/hotel/away_reg.jsp');"
+                                        onclick="insert('#form', '/Hotel/pages/hotel/hotel_msg.jsp');"
                                 >通知</a></p>
                         </div>
                         <div class="col-md-2 text-center">
@@ -58,5 +58,6 @@
         <script src="/Hotel/js/plan.js"></script>
         <script src="/Hotel/js/branch.js"></script>
         <script src="/Hotel/js/hotel_info.js"></script>
+        <script src="/Hotel/js/hotel_msg.js"></script>
 </body>
 </html>

@@ -12,6 +12,7 @@ import vo.hotel.BranchVO;
 import vo.hotel.CancelRoomVO;
 import vo.hotel.HotelInfoVO;
 import vo.hotel.HotelModifyVO;
+import vo.hotel.InfoRequestVO;
 import vo.hotel.PlanRequestVO;
 import vo.hotel.PlanVO;
 import vo.hotel.ResideVO;
@@ -44,6 +45,14 @@ public interface Hotel {
         List<BranchRequestVO> getBranchRequest();
         
         List<PlanRequestVO> getPlanRequest();
+        
+        List<InfoRequestVO> getInfoRequest();
+        
+        List<BranchRequestVO> getAllBranchRequest(String empId);
+        
+        List<PlanRequestVO> getAllPlanRequest(String empId);
+        
+        List<InfoRequestVO> getAllInfoRequest(String empId);
         
         ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
         

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import constant.ApplyState;
 import po.pk.InfoModifyPK;
+import vo.hotel.InfoRequestVO;
 
 @Entity
 @Table(name="info_modify_apply")
@@ -37,6 +38,20 @@ public class HotelModifyRecordPO {
                 this.name = name;
                 this.address = address;
                 this.state = state;
+        }
+        
+        public InfoRequestVO toVO() {
+                String state = "";
+                switch(this.state) {
+                case approval:
+                        state = "通过"; break;
+                case disapproval:
+                        state = "拒绝"; break;
+                case unread:
+                        state = "未读"; break;
+                }
+                
+                return new InfoRequestVO(pk.getEmpId(), name, address, pk.getApplyTime(), state);
         }
 
         public InfoModifyPK getPk() {
