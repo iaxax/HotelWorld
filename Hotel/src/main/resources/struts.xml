@@ -225,6 +225,12 @@
                                 <param name="root">planList</param>
                         </result>
                 </action>
+                <action name="getInfoRequest" class="CEOMsgAction" method="getInfoRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">infoList</param>
+                        </result>
+                </action>
                 <action name="checkBranchRequest" class="CEOMsgAction" method="checkBranchRequest">
                         <result name="login">/index.jsp</result>
                         <result type="json">
@@ -232,6 +238,12 @@
                         </result>
                 </action>
                 <action name="checkPlanRequest" class="CEOMsgAction" method="checkPlanRequest">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">result</param>
+                        </result>
+                </action>
+                <action name="checkInfoRequest" class="CEOMsgAction" method="checkInfoRequest">
                         <result name="login">/index.jsp</result>
                         <result type="json">
                                 <param name="root">result</param>
@@ -250,6 +262,12 @@
                         </result>
                 </action>
                 <action name="getHotelStat" class="HotelDataAction" method="getHotelStat">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">statInfo</param>
+                        </result>
+                </action>
+                <action name="getHotelGeneralStat" class="HotelDataAction" method="getHotelGeneralStat">
                         <result name="login">/index.jsp</result>
                         <result type="json">
                                 <param name="root">statInfo</param>

@@ -21,12 +21,6 @@ function showModForm() {
 function modifyForm() {
 	var tip = $('#tip');
 	
-	var name = $('#name').val();
-	if (name.length == 0) {
-		showError(tip, '请输入旅馆姓名');
-		return;
-	}
-	
 	var addr = $('#address').val();
 	if (addr.length == 0) {
 		showError(tip, '请输入旅馆地址');
@@ -37,7 +31,6 @@ function modifyForm() {
 		url: '/Hotel/modifyHotelInfo.action',
 		method: 'post',
 		data: {
-			"name": name,
 			"address": addr
 		},
 		success: function(result) {
@@ -56,9 +49,9 @@ function modifyForm() {
 	});
 }
 
-function getStatInfo() {
+function getStatInfo(url) {
 	$.ajax({
-		url: '/Hotel/getHotelStat.action',
+		url: url,
 		method: 'get',
 		success: function(result) {
 			var resideData = result[0];

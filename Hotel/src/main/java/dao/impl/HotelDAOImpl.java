@@ -506,16 +506,41 @@ public class HotelDAOImpl implements HotelDAO {
                 session.close();
                 return list;
         }
+        
+        @Override
+        public List<HotelModifyRecordPO> getInfoRequest() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<HotelModifyRecordPO> result = session.createQuery(
+                                "from po.hotel.HotelModifyRecordPO "
+                                + "where state = '" + ApplyState.unread + "'"
+                ).list();
+                session.close();
+                return result;
+        }
 
         @Override
         public ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk) {
                 Session session = DBUtil.getSession();
                 Transaction transaction = session.beginTransaction();
-                session.createQuery(
-                                "update po.hotel.BranchApplyPO "
-                                + "set state = '" + (isSuccess ? ApplyState.approval : ApplyState.disapproval) + "' "
-                                + "where pk.empId = '" + pk.getEmpId() + "' and pk.applyTime = '" + pk.getApplyTime() + "'"
-                ).executeUpdate();
+                
+                BranchApplyPO record = (BranchApplyPO) session.createQuery(
+                                "from po.hotel.BranchApplyPO "
+                                + "where pk.empId = '" + pk.getEmpId() + "' and "
+                                + "pk.applyTime = '" + pk.getApplyTime() + "'"
+                ).list().get(0);
+                
+                record.setState(isSuccess ? ApplyState.approval : ApplyState.disapproval);
+                session.update(record);
+                
+                if (isSuccess) {
+                        session.save(new HotelInfoPO(
+                                        record.getHotelName(),
+                                        record.getHotelAddr(),
+                                        record.getOpenDate()
+                        ));
+                }
+                
                 transaction.commit();
                 session.close();
                 return new ResultVO(true, "您已完成该开店申请的审批");
@@ -525,15 +550,56 @@ public class HotelDAOImpl implements HotelDAO {
         public ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk) {
                 Session session = DBUtil.getSession();
                 Transaction transaction = session.beginTransaction();
-                session.createQuery(
-                                "update po.hotel.PlanPO "
-                                + "set state = '" + (isSuccess ? ApplyState.approval : ApplyState.disapproval) + "' "
+                
+                PlanRecordPO record =  (PlanRecordPO) session.createQuery(
+                                "from po.hotel.PlanRecordPO "
                                 + "where pk.hotel = '" + pk.getHotel() + "' and pk.room = '" + pk.getRoom() + "' "
                                 + "and pk.proposalTime = '" + pk.getProposalTime() + "'"
-                ).executeUpdate();
+                ).list().get(0);
+                
+                record.setState(isSuccess ? ApplyState.approval : ApplyState.disapproval);
+                session.update(record);
+                
+                if (isSuccess) {
+                        session.createQuery(
+                                        "update po.hotel.RoomPO  "
+                                        + "set price = " + record.getPrice()
+                                        + " where pk.hotel = '" + record.getPk().getHotel() + "' and "
+                                        + "pk.room = '" + record.getPk().getRoom() + "'"
+                        ).executeUpdate();
+                }
+                
                 transaction.commit();
                 session.close();
                 return new ResultVO(true, "您已完成该发布计划申请的审批");
+        }
+        
+        @Override
+        public ResultVO checkInfoRequest(boolean isSuccess, InfoModifyPK pk) {
+                Session session = DBUtil.getSession();
+                Transaction transaction = session.beginTransaction();
+                
+                HotelModifyRecordPO record = (HotelModifyRecordPO) session.createQuery(
+                                "from po.hotel.HotelModifyRecordPO "
+                                + "where pk.empId = '" + pk.getEmpId() + "' and "
+                                + "pk.applyTime = '" + pk.getApplyTime() + "'"
+                ).list().get(0);
+                
+                record.setState(isSuccess ? ApplyState.approval : ApplyState.disapproval);
+                session.update(record);
+                
+                if (isSuccess) {
+                        String hotel = getHotelName(pk.getEmpId());
+                        session.createQuery(
+                                        "update po.hotel.HotelInfoPO "
+                                        + "set address = '" + record.getAddress() + "' "
+                                        + "where name = '" + hotel + "'"
+                        ).executeUpdate();
+                }
+                
+                transaction.commit();
+                session.close();
+                return new ResultVO(true, "您已经完成该信息修改申请的审批");
         }
 
         @Override
@@ -568,14 +634,12 @@ public class HotelDAOImpl implements HotelDAO {
                                 "from po.hotel.HotelInfoPO where name = '" + oldName + "'"
                 ).list().get(0);
                 
-                String newName = vo.getName();
-                String newAddr = vo.getName();
-                newName = newName.equals("") ? info.getName() : newName;
+                String newAddr = vo.getAddress();
                 newAddr = newAddr.equals("") ? info.getAddress() : newAddr;
                 
                 session.save(new HotelModifyRecordPO(
                                 new InfoModifyPK(vo.getEmpId(), TimeUtil.getCurrentTime()),
-                                newName, newAddr, ApplyState.unread
+                                newAddr, ApplyState.unread
                 ));
                 
                 transaction.commit();
@@ -592,6 +656,36 @@ public class HotelDAOImpl implements HotelDAO {
                                 "from po.hotel.ResideRecordPO "
                                 + "where hotel = '" + hotel + "' and "
                                 + "timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (ResideRecordPO po : resideList) {
+                        String year = TimeUtil.getYear(po.getPk().getArriveTime());
+                        if (result.containsKey(year)) {
+                                int num = result.get(year);
+                                result.put(year, num + 1);
+                        }
+                        else {
+                                result.put(year,  0);
+                        }
+                }
+                
+                session.close();
+                return result;
+        }
+        
+        @Override
+        public Map<String, Integer> getResideRecords() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> resideList = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + " where timestampdiff(year, pk.arriveTime, now()) < 3"
                 ).list();
                 
                 Map<String, Integer> result = new HashMap<>();
@@ -646,6 +740,36 @@ public class HotelDAOImpl implements HotelDAO {
                 session.close();
                 return result;
         }
+        
+        @Override
+        public Map<String, Integer> getBookRecords() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<BookRecordPO> list = session.createQuery(
+                                "from po.hotel.BookRecordPO "
+                                + "where timestampdiff(year, pk.bookTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (BookRecordPO po : list) {
+                        String year = TimeUtil.getYear(po.getPk().getBookTime());
+                        if (result.containsKey(year)) {
+                                int num = result.get(year);
+                                result.put(year, num + 1);
+                        }
+                        else {
+                                result.put(year, 0);
+                        }
+                }
+                
+                session.close();
+                return result;
+        }
 
         @Override
         public Map<String, Integer> getFinanceStat(String empId) {
@@ -656,6 +780,36 @@ public class HotelDAOImpl implements HotelDAO {
                                 "from po.hotel.ResideRecordPO "
                                 + "where hotel = '" + hotel + "' and "
                                 + "timestampdiff(year, pk.arriveTime, now()) < 3"
+                ).list();
+                
+                Map<String, Integer> result = new HashMap<>();
+                String[] years = TimeUtil.getLatest3Year();
+                result.put(years[0], 0);
+                result.put(years[1], 0);
+                result.put(years[2], 0);
+                
+                for (ResideRecordPO po : list) {
+                        String year = TimeUtil.getYear(po.getPk().getArriveTime());
+                        if (result.containsKey(year)) {
+                                int cost = result.get(year);
+                                result.put(year, cost + po.getCost());
+                        }
+                        else {
+                                result.put(year, po.getCost());
+                        }
+                }
+                
+                session.close();
+                return result;
+        }
+        
+        @Override
+        public Map<String, Integer> getFinanceStat() {
+                Session session = DBUtil.getSession();
+                @SuppressWarnings("unchecked")
+                List<ResideRecordPO> list = session.createQuery(
+                                "from po.hotel.ResideRecordPO "
+                                + "where timestampdiff(year, pk.arriveTime, now()) < 3"
                 ).list();
                 
                 Map<String, Integer> result = new HashMap<>();

@@ -9,6 +9,7 @@ import po.hotel.HotelInfoPO;
 import po.hotel.HotelModifyRecordPO;
 import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
+import po.pk.InfoModifyPK;
 import po.pk.PlanPK;
 import vo.hotel.BookRoomVO;
 import vo.hotel.BranchVO;
@@ -48,9 +49,13 @@ public interface HotelDAO {
         
         List<PlanRecordPO> getPlanRequest();
         
+        List<HotelModifyRecordPO> getInfoRequest();
+        
         ResultVO checkBranchRequest(boolean isSuccess, BranchPK pk);
         
         ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
+        
+        ResultVO checkInfoRequest(boolean isSuccess, InfoModifyPK pk);
         
         String getHotelName(String empId);
         
@@ -63,6 +68,12 @@ public interface HotelDAO {
         Map<String, Integer> getBookRecords(String empId);
         
         Map<String, Integer> getFinanceStat(String empId);
+        
+        Map<String, Integer> getResideRecords();
+        
+        Map<String, Integer> getBookRecords();
+        
+        Map<String, Integer> getFinanceStat();
         
         List<BranchApplyPO> getAllBranchRequest(String empId);
         

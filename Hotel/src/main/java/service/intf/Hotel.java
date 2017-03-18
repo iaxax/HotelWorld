@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import po.pk.BranchPK;
+import po.pk.InfoModifyPK;
 import po.pk.PlanPK;
 import vo.hotel.AwayVO;
 import vo.hotel.BookRoomVO;
@@ -60,9 +61,13 @@ public interface Hotel {
         
         ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk);
         
+        ResultVO checkInfoRequest(boolean isSuccess, InfoModifyPK pk);
+        
         HotelInfoVO getHotelBasicInfo(String empId);
         
         ResultVO modifyHotelInfo(HotelModifyVO vo);
         
         List<Map<String, Integer>> getHotelStat(String empId);
+        
+        List<Map<String, Integer>> getHotelStat();
 }

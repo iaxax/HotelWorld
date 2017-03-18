@@ -111,7 +111,6 @@ function getInfoInform() {
 				
 				doc +=
 					'<div class="col-md-4 record-card">'
-					+ '<p>旅店名称： ' + b.name + '</p>'
 					+ '<p>旅店地址： ' + b.address + '</p>'
 					+ '<p>申请时间： ' + b.applyTime + '</p>'
 					+ '<p>审批结果： ' + res + '</p>'

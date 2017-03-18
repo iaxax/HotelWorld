@@ -10,14 +10,18 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import po.pk.BranchPK;
+import po.pk.InfoModifyPK;
 import po.pk.PlanPK;
 import service.intf.Hotel;
 import vo.hotel.BranchRequestVO;
+import vo.hotel.InfoRequestVO;
 import vo.hotel.PlanRequestVO;
 import vo.result.ResultVO;
 
 public class CEOMsgAction extends ActionSupport {
         
+        private static final long serialVersionUID = 3505446870952854581L;
+
         private boolean success;
         
         private String empId;
@@ -31,6 +35,8 @@ public class CEOMsgAction extends ActionSupport {
         private List<BranchRequestVO> branchList;
         
         private List<PlanRequestVO> planList;
+        
+        private List<InfoRequestVO> infoList;
         
         private Hotel hotel;
         
@@ -59,6 +65,13 @@ public class CEOMsgAction extends ActionSupport {
         }
         
         public String checkInfoRequest() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                result = hotel.checkInfoRequest(success, new InfoModifyPK(empId, applyTime));
                 return SUCCESS;
         }
 
@@ -85,6 +98,13 @@ public class CEOMsgAction extends ActionSupport {
         }
         
         public String getInfoRequest() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                infoList = hotel.getInfoRequest();
                 return SUCCESS;
         }
 
@@ -158,6 +178,14 @@ public class CEOMsgAction extends ActionSupport {
 
         public void setRoomNum(String roomNum) {
                 this.roomNum = roomNum;
+        }
+
+        public List<InfoRequestVO> getInfoList() {
+                return infoList;
+        }
+
+        public void setInfoList(List<InfoRequestVO> infoList) {
+                this.infoList = infoList;
         }
         
 }

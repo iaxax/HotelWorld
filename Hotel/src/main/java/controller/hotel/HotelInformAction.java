@@ -16,6 +16,8 @@ import vo.hotel.PlanRequestVO;
 
 public class HotelInformAction extends ActionSupport {
         
+        private static final long serialVersionUID = -3922878837657168941L;
+
         private Hotel hotel;
         
         private List<BranchRequestVO> branchList;

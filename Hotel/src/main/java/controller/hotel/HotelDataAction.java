@@ -23,13 +23,22 @@ public class HotelDataAction extends ActionSupport {
         
         private Hotel hotel;
         
-        private String name;
-        
         private String address;
         
         private ResultVO result;
         
         private List<Map<String, Integer>> statInfo;
+        
+        public String getHotelGeneralStat() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                statInfo = hotel.getHotelStat();
+                return SUCCESS;
+        }
 
         public String getHotelBasicInfo() {
                 HttpServletRequest request = ServletActionContext.getRequest();
@@ -61,8 +70,7 @@ public class HotelDataAction extends ActionSupport {
                 }
                 
                 result = hotel.modifyHotelInfo(new HotelModifyVO(
-                                (String)session.getAttribute("id"),
-                                name, address
+                                (String)session.getAttribute("id"), address
                 ));
                 return SUCCESS;
         }
@@ -81,14 +89,6 @@ public class HotelDataAction extends ActionSupport {
 
         public void setHotel(Hotel hotel) {
                 this.hotel = hotel;
-        }
-
-        public String getName() {
-                return name;
-        }
-
-        public void setName(String name) {
-                this.name = name;
         }
 
         public String getAddress() {

@@ -19,5 +19,5 @@
 
 <script>
 getHotelBasicInfo();
-getStatInfo();
+getStatInfo('/Hotel/getHotelStat.action');
 </script>

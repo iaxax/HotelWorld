@@ -11,6 +11,7 @@ import po.hotel.HotelInfoPO;
 import po.hotel.HotelModifyRecordPO;
 import po.hotel.PlanRecordPO;
 import po.pk.BranchPK;
+import po.pk.InfoModifyPK;
 import po.pk.PlanPK;
 import service.intf.Hotel;
 import vo.hotel.AwayVO;
@@ -126,6 +127,11 @@ public class HotelBean implements Hotel {
         public ResultVO checkPlanRequest(boolean isSuccess, PlanPK pk) {
                 return hotel.checkPlanRequest(isSuccess, pk);
         }
+        
+        @Override
+        public ResultVO checkInfoRequest(boolean isSuccess, InfoModifyPK pk) {
+                return hotel.checkInfoRequest(isSuccess, pk);
+        }
 
         @Override
         public HotelInfoVO getHotelBasicInfo(String empId) {
@@ -135,9 +141,8 @@ public class HotelBean implements Hotel {
 
         @Override
         public ResultVO modifyHotelInfo(HotelModifyVO vo) {
-                String name = vo.getName();
                 String address = vo.getAddress();
-                if (name.equals("") && address.equals("")) {
+                if (address.equals("")) {
                         return new ResultVO(true, "旅店信息没有发生改变");
                 }
                 
@@ -152,11 +157,24 @@ public class HotelBean implements Hotel {
                 result.add(hotel.getFinanceStat(empId));
                 return result;
         }
+        
+        @Override
+        public List<Map<String, Integer>> getHotelStat() {
+                List<Map<String, Integer>> result = new ArrayList<>();
+                result.add(hotel.getResideRecords());
+                result.add(hotel.getBookRecords());
+                result.add(hotel.getFinanceStat());
+                return result;
+        }
 
         @Override
         public List<InfoRequestVO> getInfoRequest() {
-                // TODO Auto-generated method stub
-                return null;
+                List<HotelModifyRecordPO> list =  hotel.getInfoRequest();
+                List<InfoRequestVO> result = new ArrayList<>();
+                for (HotelModifyRecordPO po : list) {
+                        result.add(po.toVO());
+                }
+                return result;
         }
 
         @Override

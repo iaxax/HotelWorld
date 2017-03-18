@@ -18,9 +18,6 @@ public class HotelModifyRecordPO {
         @EmbeddedId
         private InfoModifyPK pk;
 
-        @Column(name="hotel_name")
-        private String name;
-        
         @Column(name="hotel_addr")
         private String address;
         
@@ -32,10 +29,9 @@ public class HotelModifyRecordPO {
                 super();
         }
 
-        public HotelModifyRecordPO(InfoModifyPK pk, String name, String address, ApplyState state) {
+        public HotelModifyRecordPO(InfoModifyPK pk, String address, ApplyState state) {
                 super();
                 this.pk = pk;
-                this.name = name;
                 this.address = address;
                 this.state = state;
         }
@@ -51,7 +47,7 @@ public class HotelModifyRecordPO {
                         state = "未读"; break;
                 }
                 
-                return new InfoRequestVO(pk.getEmpId(), name, address, pk.getApplyTime(), state);
+                return new InfoRequestVO(pk.getEmpId(), address, pk.getApplyTime(), state);
         }
 
         public InfoModifyPK getPk() {
@@ -60,14 +56,6 @@ public class HotelModifyRecordPO {
 
         public void setPk(InfoModifyPK pk) {
                 this.pk = pk;
-        }
-
-        public String getName() {
-                return name;
-        }
-
-        public void setName(String name) {
-                this.name = name;
         }
 
         public String getAddress() {
