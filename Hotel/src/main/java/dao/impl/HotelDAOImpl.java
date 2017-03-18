@@ -16,6 +16,7 @@ import constant.ResideState;
 import constant.RoomState;
 import dao.intf.HotelDAO;
 import dao.intf.MemberDAO;
+import po.CreditCardPO;
 import po.hotel.AwayPO;
 import po.hotel.AwayRecordPO;
 import po.hotel.BookRecordPO;
@@ -116,6 +117,12 @@ public class HotelDAOImpl implements HotelDAO {
                                         + " where memberId = " + vo.getMemberId()
                         ).executeUpdate();
                         
+                        CreditCardPO card = (CreditCardPO) session.createQuery(
+                                        "from po.CreditCardPO where account = '10001'"
+                        ).list().get(0);
+                        card.setBalance(card.getBalance() + 40);
+                        session.update(card);
+                        
                         session.createQuery(
                                         "update po.hotel.RoomPO "
                                         + "set state = 'rented' "
@@ -157,6 +164,12 @@ public class HotelDAOImpl implements HotelDAO {
                                         + "set balance = " + (balance + 40)
                                         + " where memberId = " + vo.getMemberId()
                         ).executeUpdate();
+                        
+                        CreditCardPO card = (CreditCardPO) session.createQuery(
+                                        "from po.CreditCardPO where account = '10001'"
+                        ).list().get(0);
+                        card.setBalance(card.getBalance() - 40);
+                        session.update(card);
                         
                         session.createQuery(
                                         "update po.hotel.BookRecordPO "
@@ -334,6 +347,12 @@ public class HotelDAOImpl implements HotelDAO {
                                member.setBalance(balance);
                                member.setPoints(points);
                                session.save(member);
+                               
+                               CreditCardPO card = (CreditCardPO) session.createQuery(
+                                               "from po.CreditCardPO where account = '10001'"
+                               ).list().get(0);
+                               card.setBalance(card.getBalance() + actualPrice);
+                               session.update(card);
                                
                                BookRecordPO bookRec = (BookRecordPO) session.createQuery(
                                                "from po.hotel.BookRecordPO "
