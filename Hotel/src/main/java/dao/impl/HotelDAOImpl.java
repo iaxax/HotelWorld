@@ -230,6 +230,18 @@ public class HotelDAOImpl implements HotelDAO {
                 Map<String, List<String>> info = getRoomInfo();
                 return info.get(hotel);
         }
+        
+        @Override
+        public List<String> getAllRooms(String empId) {
+                Session session = DBUtil.getSession();
+                String hotel = getHotelName(empId);
+                @SuppressWarnings("unchecked")
+                List<String> result = session.createNativeQuery(
+                                "select room_num from room where hotel_name = '" + hotel + "'"
+                ).list();
+                session.close();
+                return result;
+        }
 
         @Override
         public ResultVO resideRegister(ResideVO vo) {

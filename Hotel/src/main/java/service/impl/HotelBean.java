@@ -58,6 +58,11 @@ public class HotelBean implements Hotel {
         public List<String> getAvailableRooms(String id) {
                 return hotel.getAvailableRooms(id);
         }
+        
+        @Override
+        public List<String> getAllRooms(String empId) {
+                return hotel.getAllRooms(empId);
+        }
 
         @Override
         public ResultVO resideRegister(ResideVO vo) {

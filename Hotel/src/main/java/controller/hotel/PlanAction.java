@@ -1,5 +1,7 @@
 package controller.hotel;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +24,8 @@ public class PlanAction extends ActionSupport {
         private String roomNum;
         
         private int roomPrice;
+        
+        private List<String> roomList;
 
         public String publishPlan() {
                 HttpServletRequest request = ServletActionContext.getRequest();
@@ -34,6 +38,17 @@ public class PlanAction extends ActionSupport {
                                 (String)session.getAttribute("id"),
                                 roomNum, roomPrice
                 ));
+                return SUCCESS;
+        }
+        
+        public String getAllRooms() {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                HttpSession session = request.getSession();
+                if (session == null) {
+                        return "login";
+                }
+                
+                roomList = hotel.getAllRooms((String)session.getAttribute("id"));
                 return SUCCESS;
         }
 
@@ -67,6 +82,14 @@ public class PlanAction extends ActionSupport {
 
         public void setRoomPrice(int roomPrice) {
                 this.roomPrice = roomPrice;
+        }
+
+        public List<String> getRoomList() {
+                return roomList;
+        }
+
+        public void setRoomList(List<String> roomList) {
+                this.roomList = roomList;
         }
         
 }

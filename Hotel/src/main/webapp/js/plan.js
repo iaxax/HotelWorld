@@ -32,3 +32,18 @@ function submitPlan() {
 		}
 	});
 }
+
+function getAllRooms() {
+	$.ajax({
+		url: '/Hotel/getAllRooms.action',
+		method: 'get',
+		success: function(result) {
+			var doc = '';
+			for (var i = 0; i < result.length; ++i) {
+				doc += '<option>' + result[i] + '</option>';
+			}
+			
+			$('#roomNum').html(doc);
+		}
+	});
+}

@@ -201,6 +201,12 @@
                                 <param name="root">result</param>
                         </result>
                 </action>
+                <action name="getAllRooms" class="PlanAction" method="getAllRooms">
+                        <result name="login">/index.jsp</result>
+                        <result type="json">
+                                <param name="root">roomList</param>
+                        </result>
+                </action>
                 <action name="branchApply" class="BranchApplyAction" method="branchApply">
                         <result name="login">/index.jsp</result>
                         <result type="json">

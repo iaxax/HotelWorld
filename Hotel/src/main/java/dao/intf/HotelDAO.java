@@ -30,6 +30,8 @@ public interface HotelDAO {
         
         List<String> getAvailableRooms(String id);
         
+        List<String> getAllRooms(String empId);
+        
         ResultVO resideRegister(ResideVO vo);
         
         int getRoomPrice(String hotel, String roomNum);
