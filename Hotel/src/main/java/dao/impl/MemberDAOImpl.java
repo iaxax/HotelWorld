@@ -245,7 +245,6 @@ public class MemberDAOImpl implements MemberDAO {
                         );
                         memQuery.executeUpdate();
                         
-                        
                         transaction.commit();
                         return new ResultVO(true, "会员充值成功");
                 }

@@ -277,10 +277,10 @@ public class HotelDAOImpl implements HotelDAO {
                                         + "where pk.hotel = '" + hotel + "' and "
                                         + "pk.room = '" + vo.getRoom() + "'"
                         ).list().get(0);
-                        int price = room.getPrice() * vo.getDays();
                         
                         String now = TimeUtil.getCurrentTime();
                         if (vo.getMemberId() == null) {
+                                int price = room.getPrice() * vo.getDays();
                                 room.setState(RoomState.rented);
                                 session.update(room);
                                 
@@ -299,6 +299,7 @@ public class HotelDAOImpl implements HotelDAO {
                                                 + "room = '" + vo.getRoom() + "'"
                                 ).list().get(0);
                                 
+                                int price = room.getPrice() * rec.getDays();
                                 String resideDate = rec.getResideDate();
                                 if (TimeUtil.isBeforeToday(resideDate)) {
                                         transaction.commit();

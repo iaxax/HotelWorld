@@ -18,7 +18,7 @@ public class HotelInfoPO {
         @Column(name="address")
         private String address;
         
-        @Column(name="open_date")
+        @Column(name="open_time")
         private String openDate;
 
         public HotelInfoPO() {
