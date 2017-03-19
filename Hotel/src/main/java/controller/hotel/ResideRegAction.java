@@ -57,6 +57,8 @@ public class ResideRegAction extends ActionSupport {
                                 memberId, roomNum,
                                 registrant, days
                 ));
+                
+                memberId = null;
                 return SUCCESS;
         }
         
